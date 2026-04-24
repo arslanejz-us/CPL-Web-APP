@@ -35,6 +35,11 @@ const FEATURES: Feature[] = [
     description:
       "Expert help with our online 3D design studio at no cost before production.",
   },
+  {
+    title: "This is Testing Block",
+    description:
+      "Expert help with our online 3D design studio at no cost before production.",
+  },
 ];
 
 const AUTO_MS = 5000;

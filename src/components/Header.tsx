@@ -1,12 +1,14 @@
 "use client";
 
-import type { ReactElement } from "react";
+import { ReactElement, useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import QuoteModal from "./QuoteModal";
 import styles from "./Header.module.css";
 
 const Icons = {
   Facebook: () => (
-    <svg viewBox="0 0 24 24" className={styles.socialIconSvg}><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" /></svg>
+    <svg viewBox="0 0 24 24" className={styles.socialIconSvg}><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" /></svg>
   ),
   Instagram: () => (
     <svg viewBox="0 0 24 24" className={styles.socialIconSvg}><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
@@ -23,129 +25,136 @@ const Icons = {
   Search: () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.searchIcon}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
   ),
-  Star: () => (
-    <svg viewBox="0 0 24 24" className={styles.starIcon}><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
+  Hamburger: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.hamburgerIcon}><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
   ),
-  LogoBox: () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.logoIcon}>
-      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-      <line x1="12" y1="22.08" x2="12" y2="12"></line>
-    </svg>
+  Close: () => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.closeIcon}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
   )
 };
 
 export default function Header(): ReactElement {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  
+  useEffect(() => {
+    if (isMobileMenuOpen || isQuoteModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isMobileMenuOpen, isQuoteModalOpen]);
+
   return (
     <header className={styles.headerContainer}>
       {/* Top Bar */}
-      <div className={styles.topBar}>
-        <div className={styles.socialIcons}>
-          <a href="#" aria-label="Facebook"><Icons.Facebook /></a>
-          <a href="#" aria-label="Instagram"><Icons.Instagram /></a>
-          <a href="#" aria-label="LinkedIn"><Icons.LinkedIn /></a>
-          <a href="#" aria-label="Pinterest"><Icons.Pinterest /></a>
-        </div>
-        <div className={styles.contactInfo}>
-          Free Shipping &nbsp;|&nbsp; <a href="tel:8333275627">(833) 327-5627</a> &nbsp;|&nbsp; <a href="mailto:inquiry@custompackaginglane.com">inquiry@custompackaginglane.com</a>
-        </div>
-      </div>
+
 
       {/* Main Navigation */}
-      <div className={styles.mainNav}>
-        {/* Brand/Logo Section */}
-        <Link href="/" className={styles.brandContainer}>
-          <div className={styles.logo}>
-            <Icons.LogoBox />
-            <div className={styles.logoText}>
-              <span className={styles.logoTopText}>CUSTOM</span>
-              <span className={styles.logoBottomText}>PACKAGING LANE</span>
-            </div>
-          </div>
-          <div className={styles.trustpilot}>
-            <div className={styles.trustpilotStar}><Icons.Star /> Trustpilot</div>
-            <div className={styles.trustpilotReviews}>65 reviews</div>
-          </div>
-        </Link>
-
-        {/* Desktop Links with Mega Menus */}
-        <ul className={styles.navMenu}>
-          
-          <li className={styles.navItem}>
-            <Link href="/industries" className={styles.navLink}>
-              Industries <Icons.ChevronDown />
-            </Link>
-            {/* Mega Menu Dropdown */}
-            <div className={styles.megaMenu}>
-              <div className={styles.megaMenuColumn}>
-                <h3>Trending Industries</h3>
-                <ul className={styles.megaMenuList}>
-                  <li><Link href="/cbd" className={styles.megaMenuLink}>CBD Packaging</Link></li>
-                  <li><Link href="/cosmetics" className={styles.megaMenuLink}>Cosmetics Packaging</Link></li>
-                  <li><Link href="/food" className={styles.megaMenuLink}>Food & Beverage</Link></li>
-                  <li><Link href="/cbd-gummies" className={styles.megaMenuLink}>Custom Gummies Boxes</Link></li>
-                </ul>
-              </div>
-              <div className={styles.megaMenuColumn}>
-                <h3>More Industries</h3>
-                <ul className={styles.megaMenuList}>
-                  <li><Link href="/retail" className={styles.megaMenuLink}>Retail Packaging</Link></li>
-                  <li><Link href="/electronics" className={styles.megaMenuLink}>Electronics</Link></li>
-                  <li><Link href="/apparel" className={styles.megaMenuLink}>Apparel Packaging</Link></li>
-                  <li><Link href="/gifts" className={styles.megaMenuLink}>Gift Boxes</Link></li>
-                </ul>
-              </div>
-              <div className={styles.megaMenuColumn}>
-                <h3>Industry Features</h3>
-                <ul className={styles.megaMenuList}>
-                  <li><Link href="/eco-friendly" className={styles.megaMenuLink}>Eco-Friendly Options</Link></li>
-                  <li><Link href="/premium" className={styles.megaMenuLink}>Premium Finishes</Link></li>
-                </ul>
-              </div>
-            </div>
-          </li>
-
-          <li className={styles.navItem}>
-            <Link href="/shapes" className={styles.navLink}>
-              Shapes & Styles <Icons.ChevronDown />
-            </Link>
-          </li>
-
-          <li className={styles.navItem}>
-            <Link href="/material" className={styles.navLink}>
-              Material <Icons.ChevronDown />
-            </Link>
-          </li>
-
-          <li className={styles.navItem}>
-            <Link href="/custom-cbd-boxes" className={styles.navLink}>
-              Custom CBD Boxes
-            </Link>
-          </li>
-
-          <li className={styles.navItem}>
-            <Link href="/flexible-packaging" className={styles.navLink}>
-              Flexible Packaging <Icons.ChevronDown />
-            </Link>
-          </li>
-
-          <li className={styles.navItem}>
-             <Link href="/portfolio" className={styles.navLink}>Portfolio</Link>
-          </li>
-
-          <li className={styles.navItem}>
-             <Link href="/blog" className={styles.navLink}>Blog</Link>
-          </li>
-        </ul>
-
-        {/* Right Actions */}
-        <div className={styles.headerActions}>
-          <Icons.Search />
-          <Link href="/quote" className={styles.quoteBtn}>
-            Get Quote
+      <div className={styles.mainNavWrapper}>
+        <div className={styles.mainNav}>
+          {/* Brand/Logo Section */}
+          <Link href="/" className={styles.brandContainer}>
+            <Image
+              src="/images/website-logo.webp"
+              alt="Custom Packaging Lane Logo"
+              width={200}
+              height={50}
+              className={styles.logoImage}
+              priority
+            />
           </Link>
+
+          {/* Desktop Links */}
+          <ul className={styles.navMenu}>
+            <li className={styles.navItem}>
+              <Link href="/" className={styles.navLink}>Home</Link>
+            </li>
+
+            <li className={styles.navItem}>
+              <Link href="/products" className={styles.navLink}>
+                Products <Icons.ChevronDown />
+              </Link>
+            </li>
+
+            <li className={styles.navItem}>
+              <Link href="/industries" className={styles.navLink}>
+                Industries <Icons.ChevronDown />
+              </Link>
+            </li>
+
+            <li className={styles.navItem}>
+              <Link href="/blog" className={styles.navLink}>Blog</Link>
+            </li>
+
+            <li className={styles.navItem}>
+              <Link href="/about" className={styles.navLink}>About</Link>
+            </li>
+
+            <li className={styles.navItem}>
+              <Link href="/contact" className={styles.navLink}>Contact</Link>
+            </li>
+          </ul>
+
+          {/* Right Actions - Desktop */}
+          <div className={styles.headerActions}>
+            <div className={styles.searchContainer}>
+              <Icons.Search />
+            </div>
+            <button className={styles.ctaBtn} onClick={() => setIsQuoteModalOpen(true)}>
+              Rush Order
+            </button>
+          </div>
+
+          {/* Mobile Hamburger Toggle */}
+          <button
+            className={styles.mobileMenuToggle}
+            onClick={() => setIsMobileMenuOpen(true)}
+            aria-label="Open Mobile Menu"
+          >
+            <Icons.Hamburger />
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <div className={`${styles.mobileMenuOverlay} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
+        <div className={styles.mobileMenuContent}>
+          <div className={styles.mobileMenuHeader}>
+            <Image
+              src="/images/website-logo.webp"
+              alt="Custom Packaging Lane Logo"
+              width={160}
+              height={40}
+              className={styles.logoImage}
+            />
+            <button
+              className={styles.mobileMenuClose}
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close Mobile Menu"
+            >
+              <Icons.Close />
+            </button>
+          </div>
+
+          <ul className={styles.mobileNavMenu}>
+            <li><Link href="/" onClick={() => setIsMobileMenuOpen(false)}>Home</Link></li>
+            <li><Link href="/products" onClick={() => setIsMobileMenuOpen(false)}>Products</Link></li>
+            <li><Link href="/industries" onClick={() => setIsMobileMenuOpen(false)}>Industries</Link></li>
+            <li><Link href="/blog" onClick={() => setIsMobileMenuOpen(false)}>Blog</Link></li>
+            <li><Link href="/about" onClick={() => setIsMobileMenuOpen(false)}>About</Link></li>
+            <li><Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link></li>
+          </ul>
+
+          <div className={styles.mobileMenuFooter}>
+            <button className={styles.ctaBtnMobile} onClick={() => { setIsMobileMenuOpen(false); setIsQuoteModalOpen(true); }}>
+              Rush Order
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <QuoteModal isOpen={isQuoteModalOpen} onClose={() => setIsQuoteModalOpen(false)} />
     </header>
   );
 }

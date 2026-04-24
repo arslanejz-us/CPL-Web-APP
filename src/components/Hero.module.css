@@ -1,91 +1,182 @@
-.heroContainer {
+.heroSection {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+}
+
+.carouselContainer {
   position: relative;
   width: 100%;
-  min-height: 500px;
-  display: flex;
-  align-items: center;
-  background-image: url('/images/hero-bg.png');
-  background-size: cover;
-  background-position: right center; /* Ensure the image focus is appropriate */
-  background-repeat: no-repeat;
-  padding: 4rem 5%;
   overflow: hidden;
 }
 
-@media (min-width: 1200px) {
-  .heroContainer {
-    padding: 5rem 8%;
-    min-height: 580px;
+.carouselTrack {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+.carouselSlide {
+  box-sizing: border-box;
+  border-right: 4px solid white;
+}
+
+@media (max-width: 768px) {
+  .carouselSlide {
+    border-right: none;
   }
 }
 
-.heroContent {
-  max-width: 580px;
+.slideInner {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .slideInner {
+    height: 450px;
+  }
+}
+
+.slideImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+  z-index: 1;
+}
+
+.slideContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 2.5rem;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  z-index: 10;
+  gap: 1.5rem;
 }
 
-.heading {
-  font-size: 2.8rem;
-  font-weight: 500;
-  color: #06544a; /* Muted dark teal for heading text */
-  line-height: 1.25;
-  margin-bottom: 1.2rem;
-  letter-spacing: -0.5px;
-}
-
-.description {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #06544a;
-  margin-bottom: 2.5rem;
-  line-height: 1.4;
-}
-
-.ctaButton {
-  display: inline-flex;
-  align-items: center;
-  background-color: #0b786c;
-  color: white;
-  padding: 0.85rem 2.2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(11, 120, 108, 0.2);
-}
-
-.ctaButton:hover {
-  background-color: #086156;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(11, 120, 108, 0.35);
-}
-
-/* Mobile responsiveness */
 @media (max-width: 768px) {
-  .heroContainer {
-    min-height: 400px;
-    padding: 3rem 5%;
-    background-position: 70% center; 
-  }
-  
-  .heroContent {
-    background: rgba(255, 255, 255, 0.45);
+  .slideContent {
     padding: 1.5rem;
-    border-radius: 8px;
-    backdrop-filter: blur(4px);
-    width: 100%;
   }
+}
 
-  .heading {
-    font-size: 2.1rem;
+.slideTitle {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  line-height: 1.1;
+}
+
+@media (max-width: 768px) {
+  .slideTitle {
+    font-size: 2.5rem;
   }
-  
-  .description {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
+}
+
+.slideFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.slideLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.footerLink {
+  color: white;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.footerLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.shopNow {
+  color: white;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.shopNow:hover {
+  opacity: 0.8;
+}
+
+.arrow {
+  font-size: 1.2rem;
+}
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  color: #1a1a1a;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.navButton svg {
+  width: 24px;
+  height: 24px;
+}
+
+.navButton:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.prevButton {
+  left: 2rem;
+}
+
+.nextButton {
+  right: 2rem;
+}
+
+@media (max-width: 768px) {
+  .prevButton {
+    left: 1rem;
+  }
+  .nextButton {
+    right: 1rem;
   }
 }
