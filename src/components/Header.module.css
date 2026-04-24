@@ -1,0 +1,281 @@
+.headerContainer {
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  width: 100%;
+}
+
+.topBar {
+  background-color: #0b786c;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 2%;
+  font-size: 0.8rem;
+  letter-spacing: 0.3px;
+}
+
+@media (min-width: 1200px) {
+  .topBar {
+    padding: 0.6rem 5%;
+  }
+}
+
+.socialIcons {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialIcons a {
+  color: white;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.socialIcons a:hover {
+  opacity: 1;
+}
+
+.socialIconSvg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+.contactInfo {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-weight: 500;
+}
+
+.contactInfo a {
+  color: white;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.contactInfo a:hover {
+  opacity: 0.8;
+}
+
+.mainNav {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2%;
+  border-bottom: 1px solid #eaeaea;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+@media (min-width: 1200px) {
+  .mainNav {
+    padding: 1.2rem 5%;
+  }
+}
+
+.brandContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-decoration: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logoIcon {
+  color: #0b786c;
+  width: 44px;
+  height: 44px;
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  color: #0b786c;
+}
+
+.logoTopText {
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.5px;
+}
+
+.logoBottomText {
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.trustpilot {
+  display: flex;
+  align-items: center;
+  font-size: 0.7rem;
+  color: #666;
+  border: 1px solid #e1e1e1;
+  width: fit-content;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.trustpilotStar {
+  background: #00b67a;
+  color: white;
+  padding: 3px 6px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.starIcon {
+  width: 11px;
+  height: 11px;
+  fill: currentColor;
+}
+
+.trustpilotReviews {
+  padding: 3px 6px;
+  background-color: #fafafa;
+}
+
+.navMenu {
+  display: flex;
+  gap: 1.8rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem {
+  position: relative;
+}
+
+.navLink {
+  color: #1a1a1a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover, .navItem:hover > .navLink {
+  color: #0b786c;
+}
+
+.dropdownIcon {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.2s ease;
+}
+
+.navItem:hover .dropdownIcon {
+  transform: rotate(180deg);
+}
+
+.megaMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: white;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  border-top: 3px solid #0b786c;
+  min-width: 650px;
+  padding: 2.5rem;
+  display: none;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  border-radius: 0 0 8px 8px;
+}
+
+.navItem:hover .megaMenu {
+  display: grid;
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.megaMenuColumn h3 {
+  font-size: 1rem;
+  color: #0b786c;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 0.6rem;
+  font-weight: 700;
+}
+
+.megaMenuList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.megaMenuLink {
+  color: #444;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s, padding-left 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.megaMenuLink:hover {
+  color: #0b786c;
+  padding-left: 4px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  color: #1a1a1a;
+  transition: color 0.2s;
+}
+
+.searchIcon:hover {
+  color: #0b786c;
+}
+
+.quoteBtn {
+  background-color: #0b786c;
+  color: white;
+  padding: 0.7rem 1.4rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(11, 120, 108, 0.2);
+}
+
+.quoteBtn:hover {
+  background-color: #086156;
+  transform: translateY(-1px);
+}

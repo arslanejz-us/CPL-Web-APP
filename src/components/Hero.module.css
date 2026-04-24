@@ -1,0 +1,91 @@
+.heroContainer {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  background-image: url('/images/hero-bg.png');
+  background-size: cover;
+  background-position: right center; /* Ensure the image focus is appropriate */
+  background-repeat: no-repeat;
+  padding: 4rem 5%;
+  overflow: hidden;
+}
+
+@media (min-width: 1200px) {
+  .heroContainer {
+    padding: 5rem 8%;
+    min-height: 580px;
+  }
+}
+
+.heroContent {
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 10;
+}
+
+.heading {
+  font-size: 2.8rem;
+  font-weight: 500;
+  color: #06544a; /* Muted dark teal for heading text */
+  line-height: 1.25;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.5px;
+}
+
+.description {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #06544a;
+  margin-bottom: 2.5rem;
+  line-height: 1.4;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  background-color: #0b786c;
+  color: white;
+  padding: 0.85rem 2.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(11, 120, 108, 0.2);
+}
+
+.ctaButton:hover {
+  background-color: #086156;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(11, 120, 108, 0.35);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .heroContainer {
+    min-height: 400px;
+    padding: 3rem 5%;
+    background-position: 70% center; 
+  }
+  
+  .heroContent {
+    background: rgba(255, 255, 255, 0.45);
+    padding: 1.5rem;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+    width: 100%;
+  }
+
+  .heading {
+    font-size: 2.1rem;
+  }
+  
+  .description {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+}
