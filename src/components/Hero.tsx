@@ -10,7 +10,7 @@ export default function Hero(): ReactElement {
           Get Custom Packaging – Designed Around Your Brand
         </h1>
         <p className={styles.description}>
-          Delivered within 7 days with free shipping in the USA.
+          Delivered within 7 days with free shipping in the USA. 
         </p>
         <Link href="/categories" className={styles.ctaButton}>
           Explore Categories
