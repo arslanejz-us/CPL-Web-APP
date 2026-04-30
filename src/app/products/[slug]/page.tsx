@@ -27,8 +27,9 @@ type ProductRecord = {
   features?: string[] | null;
 };
 
-export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
-  const product = (await getProductBySlug(params.slug)) as ProductRecord | null;
+export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const product = (await getProductBySlug(slug)) as ProductRecord | null;
 
   if (!product) {
     notFound();
