@@ -35,7 +35,7 @@ const Icons = {
 };
 
 interface HeaderProps {
-  industries?: { id: string; slug: string; name: string; icon?: string }[];
+  industries?: { id: string; slug: string; name: string; icon?: string; icon_url?: string }[];
 }
 
 export default function Header({ industries = [] }: HeaderProps): ReactElement {
