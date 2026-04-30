@@ -74,8 +74,8 @@ export default function TopPackagingStyles() {
           {cards.map((item, idx) => (
             <Link href={item.link || '#'} key={idx} className={styles.card}>
               <Image
-                src={item.image}
-                alt={item.title}
+                src={item.image || '/images/hero-bg.png'}
+                alt={item.title || ''}
                 width={300}
                 height={200}
                 className={styles.cardImage}
