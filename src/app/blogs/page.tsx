@@ -30,7 +30,7 @@ export default async function BlogsPage() {
         </div>
       ) : (
         <div className={styles.grid}>
-          {blogs.map((blog: any) => (
+          {blogs.map((blog: { id: string; slug: string; title: string; excerpt?: string; featured_image_url?: string; published_at?: string; author_name?: string; blog_categories?: { name: string } }) => (
             <Link href={`/blogs/${blog.slug}`} key={blog.id} className={styles.card}>
               <div className={styles.imageWrapper}>
                 <Image

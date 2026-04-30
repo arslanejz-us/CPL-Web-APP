@@ -80,8 +80,8 @@ export default function NewsletterCTA({
       }
       setStatus("success");
       reset({ source });
-    } catch (error: any) {
-      setErrorMsg(error.message);
+    } catch (error: unknown) {
+      setErrorMsg(error instanceof Error ? error.message : 'Something went wrong');
       setStatus("error");
     }
   };
@@ -104,7 +104,7 @@ export default function NewsletterCTA({
               ✓
             </span>
             <div>
-              <strong>You're in.</strong> Check your inbox — your discount code
+              <strong>You&apos;re in.</strong> Check your inbox — your discount code
               is on its way.
             </div>
           </div>

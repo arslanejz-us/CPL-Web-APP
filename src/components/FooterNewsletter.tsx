@@ -48,7 +48,7 @@ export default function FooterNewsletter(): ReactElement {
   if (status === "success") {
     return (
       <p className={styles.successMsg} role="status" aria-live="polite">
-        ✓ You're subscribed. Check your inbox for a welcome message.
+        ✓ You&apos;re subscribed. Check your inbox for a welcome message.
       </p>
     );
   }

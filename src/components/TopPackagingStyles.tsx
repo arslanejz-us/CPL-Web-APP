@@ -9,7 +9,7 @@ import QuoteModal from './QuoteModal';
 import Link from 'next/link';
 
 export default function TopPackagingStyles() {
-  const [cards, setCards] = useState<any[]>([]);
+  const [cards, setCards] = useState<{ id: string; slug?: string; name?: string; title?: string; image?: string; hero_image_url?: string; link?: string; tag?: string; short_description?: string }[]>([]);
   const trackRef = useRef<HTMLDivElement>(null);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
@@ -64,7 +64,7 @@ export default function TopPackagingStyles() {
       {/* Header */}
       <div className={styles.header}>
         <h2 className={styles.title}>Top Packaging Styles</h2>
-        <p className={styles.subTitle}>We cover all your packaging needs. Can't find yours?</p>
+        <p className={styles.subTitle}>We cover all your packaging needs. Can&apos;t find yours?</p>
         <a href="#" className={styles.cta}>VIEW ALL →</a>
       </div>
 

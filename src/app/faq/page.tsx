@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import FAQAccordion from "@/components/FAQAccordion";
 import NewsletterCTA from "@/components/NewsletterCTA";
@@ -61,7 +62,7 @@ export default function FAQPage() {
           <h1 className={styles.title}>Frequently Asked Questions</h1>
           <p className={styles.subtitle}>
             Everything you need to know about ordering, materials, design
-            support, and shipping. Don't see your question? Reach out and our
+            support, and shipping. Don&apos;t see your question? Reach out and our
             packaging specialists will get back within 24 hours.
           </p>
         </header>
@@ -75,12 +76,12 @@ export default function FAQPage() {
             structural options for your specific product.
           </p>
           <div className={styles.footerCtaActions}>
-            <a href="/contact-us" className={styles.btnPrimary}>
+            <Link href="/contact-us" className={styles.btnPrimary}>
               Talk to a Specialist
-            </a>
-            <a href="/products" className={styles.btnSecondary}>
+            </Link>
+            <Link href="/products" className={styles.btnSecondary}>
               Browse Products
-            </a>
+            </Link>
           </div>
         </div>
 

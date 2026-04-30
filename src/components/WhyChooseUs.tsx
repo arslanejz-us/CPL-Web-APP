@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactElement } from "react";
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./WhyChooseUs.module.css";
 
@@ -204,15 +205,15 @@ export default function WhyChooseUs(): ReactElement {
 
       <div className={styles.ctaWrap}>
         <div className={styles.ctaButtons}>
-          <a href="/contact-us" className={styles.ctaPrimary}>
+          <Link href="/contact-us" className={styles.ctaPrimary}>
             Get My Free Quote in 60 Seconds
-          </a>
-          <a href="/products" className={styles.ctaSecondary}>
+          </Link>
+          <Link href="/products" className={styles.ctaSecondary}>
             Explore Our Packaging Solutions
             <span aria-hidden className={styles.ctaArrow}>
               →
             </span>
-          </a>
+          </Link>
         </div>
         <p className={styles.ctaMicro}>
           No minimums on samples · Free design consultation · Money-back

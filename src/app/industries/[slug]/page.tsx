@@ -15,7 +15,7 @@ export default async function IndustryDetailPage({ params }: { params: { slug: s
   }
 
   // Extract products from the join table
-  const recommendedProducts = industry.industry_products?.map((ip: any) => ip.products) || [];
+  const recommendedProducts = industry.industry_products?.map((ip: { products: { id: string; slug: string; name: string; hero_image_url?: string } }) => ip.products) || [];
 
   return (
     <div className={styles.container}>
@@ -51,7 +51,7 @@ export default async function IndustryDetailPage({ params }: { params: { slug: s
           <p className={styles.emptyState}>No specific products linked to this industry yet.</p>
         ) : (
           <div className={styles.grid}>
-            {recommendedProducts.map((product: any) => (
+            {recommendedProducts.map((product: { id: string; slug: string; name: string; hero_image_url?: string }) => (
               <Link href={`/products/${product.slug}`} key={product.id} className={styles.card}>
                 <div className={styles.imageWrapper}>
                   <Image

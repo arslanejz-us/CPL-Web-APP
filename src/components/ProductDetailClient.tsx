@@ -209,7 +209,7 @@ export default function ProductDetailClient({
         <div className={styles.quoteCard}>
           <h3 className={styles.quoteHeading}>Get a Custom Quote</h3>
           <p className={styles.quoteSub}>
-            Tell us what you need — we'll respond with pricing in 24 hours.
+            Tell us what you need — we&apos;ll respond with pricing in 24 hours.
           </p>
 
           {submitState === "success" ? (

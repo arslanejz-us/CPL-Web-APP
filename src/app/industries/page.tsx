@@ -30,7 +30,7 @@ export default async function IndustriesPage() {
         </div>
       ) : (
         <div className={styles.grid}>
-          {industries.map((industry: any) => (
+          {industries.map((industry: { id: string; slug: string; name: string; hero_image_url?: string; description?: string; short_description?: string }) => (
             <Link href={`/industries/${industry.slug}`} key={industry.id} className={styles.card}>
               <div className={styles.imageWrapper}>
                 <Image

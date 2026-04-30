@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(curl -s \"http://localhost:3005/products\")"
+      "Bash(curl -s \"http://localhost:3005/products\")",
+      "PowerShell($env:USERPROFILE = $env:USERPROFILE; npm config set cache \"$env:APPDATA\\\\npm-cache\" --global; npm cache clean --force)",
+      "Bash(fnm list *)",
+      "Bash(fnm exec *)"
     ]
   }
 }

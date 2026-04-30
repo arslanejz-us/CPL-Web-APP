@@ -85,8 +85,8 @@ export default function OurProcess(): ReactElement {
             From Concept to Delivered Packaging in 5 Steps
           </h2>
           <p className={styles.subheading}>
-            We've streamlined every step so you can focus on your product —
-            we'll handle the rest.
+            We&apos;ve streamlined every step so you can focus on your product —
+            we&apos;ll handle the rest.
           </p>
         </header>
 

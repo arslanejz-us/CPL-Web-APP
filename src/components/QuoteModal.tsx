@@ -44,8 +44,8 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps): ReactE
         onClose();
         setSuccess(false);
       }, 3000);
-    } catch (error: any) {
-      setErrorMsg(error.message);
+    } catch (error: unknown) {
+      setErrorMsg(error instanceof Error ? error.message : 'Something went wrong');
     } finally {
       setIsSubmitting(false);
     }
