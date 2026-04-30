@@ -5,16 +5,45 @@
 :root {
   --background: #fafafa;
   --foreground: #0a0a0a;
+
+  /* Brand palette (CPL design system) */
+  --primary: #1e5a73;          /* Ocean teal — main brand color */
+  --primary-light: #2a7a95;    /* Hover/active states */
+  --secondary: #0d2f42;        /* Dark navy — headings, contrast text */
+  --accent: #ff6b35;           /* CTA orange */
+  --accent-light: #ff8555;     /* Orange gradient stop */
+
+  /* Aliases kept for backward compatibility with existing class refs */
+  --primary-dark: #1e5a73;     /* maps to primary */
+  --primary-green: #2a7a95;    /* maps to primary-light */
+  --primary-orange: #ff6b35;   /* maps to accent */
+
+  /* Neutral scale */
+  --text-gray: #6b7280;
+  --text-muted: #4b5563;
+  --border-light: #e5e7eb;
+  --surface-tint: #eef5f8;     /* light teal tint */
+  --surface-soft: #f6f9fa;     /* off-white */
+
+  /* Typography stacks */
+  --font-display: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: var(--font-plus-jakarta), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #fafafa;
+    --background: #fafafa;
+    --foreground: #0a0a0a;
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
 }

@@ -1,8 +1,9 @@
 "use client";
 
-import { ReactElement, useState, useEffect } from "react";
+import { ReactElement, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 import QuoteModal from "./QuoteModal";
 import styles from "./Header.module.css";
 
@@ -33,17 +34,64 @@ const Icons = {
   )
 };
 
-export default function Header(): ReactElement {
+interface HeaderProps {
+  industries?: any[];
+}
+
+export default function Header({ industries = [] }: HeaderProps): ReactElement {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
-  
+  const [isMobileIndustriesOpen, setIsMobileIndustriesOpen] = useState(false);
+  const [isIndustriesPanelOpen, setIsIndustriesPanelOpen] = useState(false);
+  const industriesTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const industriesPanelRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    if (isMobileMenuOpen || isQuoteModalOpen) {
+    if (isMobileMenuOpen || isQuoteModalOpen || isIndustriesPanelOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-  }, [isMobileMenuOpen, isQuoteModalOpen]);
+  }, [isMobileMenuOpen, isQuoteModalOpen, isIndustriesPanelOpen]);
+
+  // Close industries panel on ESC and trap focus inside it.
+  useEffect(() => {
+    if (!isIndustriesPanelOpen) return;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsIndustriesPanelOpen(false);
+        industriesTriggerRef.current?.focus();
+        return;
+      }
+      if (e.key === 'Tab' && industriesPanelRef.current) {
+        const focusables = industriesPanelRef.current.querySelectorAll<HTMLElement>(
+          'a, button, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', onKey);
+    // Move focus into the panel when it opens
+    const t = window.setTimeout(() => {
+      industriesPanelRef.current?.querySelector<HTMLElement>('a, button')?.focus();
+    }, 50);
+
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      window.clearTimeout(t);
+    };
+  }, [isIndustriesPanelOpen]);
 
   return (
     <header className={styles.headerContainer}>
@@ -78,21 +126,33 @@ export default function Header(): ReactElement {
             </li>
 
             <li className={styles.navItem}>
-              <Link href="/industries" className={styles.navLink}>
+              <button
+                ref={industriesTriggerRef}
+                type="button"
+                className={`${styles.navLink} ${styles.navLinkButton}`}
+                aria-haspopup="dialog"
+                aria-expanded={isIndustriesPanelOpen}
+                aria-controls="industries-panel"
+                onClick={() => setIsIndustriesPanelOpen(true)}
+              >
                 Industries <Icons.ChevronDown />
-              </Link>
+              </button>
             </li>
 
             <li className={styles.navItem}>
-              <Link href="/blog" className={styles.navLink}>Blog</Link>
+              <Link href="/blogs" className={styles.navLink}>Blog</Link>
             </li>
 
             <li className={styles.navItem}>
-              <Link href="/about" className={styles.navLink}>About</Link>
+              <Link href="/about-us" className={styles.navLink}>About</Link>
             </li>
 
             <li className={styles.navItem}>
-              <Link href="/contact" className={styles.navLink}>Contact</Link>
+              <Link href="/faq" className={styles.navLink}>FAQ</Link>
+            </li>
+
+            <li className={styles.navItem}>
+              <Link href="/contact-us" className={styles.navLink}>Contact</Link>
             </li>
           </ul>
 
@@ -140,10 +200,28 @@ export default function Header(): ReactElement {
           <ul className={styles.mobileNavMenu}>
             <li><Link href="/" onClick={() => setIsMobileMenuOpen(false)}>Home</Link></li>
             <li><Link href="/products" onClick={() => setIsMobileMenuOpen(false)}>Products</Link></li>
-            <li><Link href="/industries" onClick={() => setIsMobileMenuOpen(false)}>Industries</Link></li>
-            <li><Link href="/blog" onClick={() => setIsMobileMenuOpen(false)}>Blog</Link></li>
-            <li><Link href="/about" onClick={() => setIsMobileMenuOpen(false)}>About</Link></li>
-            <li><Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link></li>
+            <li className={styles.mobileAccordionItem}>
+              <div className={styles.mobileAccordionHeader}>
+                <Link href="/industries" onClick={() => setIsMobileMenuOpen(false)}>Industries</Link>
+                <button 
+                  className={`${styles.mobileAccordionToggle} ${isMobileIndustriesOpen ? styles.rotated : ''}`}
+                  onClick={() => setIsMobileIndustriesOpen(!isMobileIndustriesOpen)}
+                >
+                  <Icons.ChevronDown />
+                </button>
+              </div>
+              <div className={`${styles.mobileAccordionContent} ${isMobileIndustriesOpen ? styles.expanded : ''}`}>
+                {industries.map(ind => (
+                  <Link key={ind.id} href={`/industries/${ind.slug}`} onClick={() => setIsMobileMenuOpen(false)} className={styles.mobileSubLink}>
+                    {ind.name}
+                  </Link>
+                ))}
+              </div>
+            </li>
+            <li><Link href="/blogs" onClick={() => setIsMobileMenuOpen(false)}>Blog</Link></li>
+            <li><Link href="/about-us" onClick={() => setIsMobileMenuOpen(false)}>About</Link></li>
+            <li><Link href="/faq" onClick={() => setIsMobileMenuOpen(false)}>FAQ</Link></li>
+            <li><Link href="/contact-us" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link></li>
           </ul>
 
           <div className={styles.mobileMenuFooter}>
@@ -153,6 +231,111 @@ export default function Header(): ReactElement {
           </div>
         </div>
       </div>
+
+      {/* Industries Slide-In Panel */}
+      <AnimatePresence>
+        {isIndustriesPanelOpen && (
+          <>
+            <motion.div
+              key="industries-backdrop"
+              className={styles.industriesBackdrop}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setIsIndustriesPanelOpen(false)}
+              aria-hidden
+            />
+            <motion.div
+              key="industries-panel"
+              ref={industriesPanelRef}
+              id="industries-panel"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="industries-panel-title"
+              className={styles.industriesPanel}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", ease: [0.4, 0, 0.2, 1], duration: 0.32 }}
+            >
+              <div className={styles.industriesPanelHeader}>
+                <h2 id="industries-panel-title" className={styles.industriesPanelTitle}>
+                  Browse by Industry
+                </h2>
+                <button
+                  type="button"
+                  className={styles.industriesPanelClose}
+                  onClick={() => setIsIndustriesPanelOpen(false)}
+                  aria-label="Close industries menu"
+                >
+                  <Icons.Close />
+                </button>
+              </div>
+
+              <div className={styles.industriesPanelBody}>
+                <Link
+                  href="/contact-us?topic=industry-fit"
+                  className={styles.industriesFeatureTile}
+                  onClick={() => setIsIndustriesPanelOpen(false)}
+                >
+                  <div>
+                    <span className={styles.industriesFeatureEyebrow}>Need help?</span>
+                    <strong className={styles.industriesFeatureTitle}>
+                      Not sure which industry fits your product?
+                    </strong>
+                    <span className={styles.industriesFeatureSub}>
+                      Get a free expert recommendation in 24 hours.
+                    </span>
+                  </div>
+                  <span aria-hidden className={styles.industriesFeatureArrow}>→</span>
+                </Link>
+
+                <ul className={styles.industriesGrid}>
+                  {industries.map((ind) => (
+                    <li key={ind.id}>
+                      <Link
+                        href={`/industries/${ind.slug}`}
+                        className={styles.industriesCard}
+                        onClick={() => setIsIndustriesPanelOpen(false)}
+                      >
+                        <div className={styles.industriesCardIcon}>
+                          <Image
+                            src={ind.icon_url || "/images/hero-bg.png"}
+                            alt=""
+                            width={40}
+                            height={40}
+                            className={styles.industriesCardIconImg}
+                          />
+                        </div>
+                        <div className={styles.industriesCardText}>
+                          <span className={styles.industriesCardTitle}>{ind.name}</span>
+                          {ind.short_description && (
+                            <span className={styles.industriesCardSub}>
+                              {ind.short_description}
+                            </span>
+                          )}
+                        </div>
+                        <span aria-hidden className={styles.industriesCardArrow}>→</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className={styles.industriesPanelFooter}>
+                <Link
+                  href="/industries"
+                  className={styles.industriesViewAll}
+                  onClick={() => setIsIndustriesPanelOpen(false)}
+                >
+                  View All Industries →
+                </Link>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       <QuoteModal isOpen={isQuoteModalOpen} onClose={() => setIsQuoteModalOpen(false)} />
     </header>

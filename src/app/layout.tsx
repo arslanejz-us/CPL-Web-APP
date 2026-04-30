@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Poppins, Plus_Jakarta_Sans } from "next/font/google";
 import Layout from "@/components/Layout";
 import "./globals.css";
 
@@ -13,9 +13,24 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "CPL Web",
-  description: "Next.js app",
+  title: "CPL Packaging — Custom Solutions for Your Brand",
+  description:
+    "Premium custom packaging for cosmetics, food & beverage, retail, CBD, and luxury brands. 7-day production, free design support, eco-friendly materials.",
 };
 
 export default function RootLayout({
@@ -24,9 +39,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ur">
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${plusJakartaSans.variable} min-h-screen antialiased`}
       >
         <Layout>{children}</Layout>
       </body>

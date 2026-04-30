@@ -11,34 +11,34 @@ type Feature = {
 
 const FEATURES: Feature[] = [
   {
-    title: "Order Flexibility",
+    title: "Industry-Leading Expertise",
     description:
-      "Production support ranging from low MOQs to high volume orders.",
+      "15+ years designing custom packaging for cosmetics, food & beverage, retail, CBD, and luxury brands.",
   },
   {
-    title: "Fast Turnaround",
+    title: "7-Day Production Guarantee",
     description:
-      "7–10 business day lead times with free USA shipping.",
+      "Tight launch deadline? We ship orders in as little as 7 business days with free expedited USA shipping.",
   },
   {
-    title: "24/7 Expert Support",
+    title: "100% Eco-Friendly Materials",
     description:
-      "24/7 customer support from dedicated packaging specialists.",
-  },
-  {
-    title: "Price Match Guarantee",
-    description:
-      "Matching verified competitor quotes while maintaining quality.",
+      "FSC-certified Kraft, recycled cardboard, soy-based inks, and biodegradable finishes for sustainable brands.",
   },
   {
     title: "Free 3D Design Support",
     description:
-      "Expert help with our online 3D design studio at no cost before production.",
+      "Unlimited revisions, dielines, and photo-realistic 3D mockups from our in-house team — at zero cost.",
   },
   {
-    title: "This is Testing Block",
+    title: "Global Shipping & Logistics",
     description:
-      "Expert help with our online 3D design studio at no cost before production.",
+      "Door-to-door delivery to 50+ countries with full tracking, customs handling, and warehousing options.",
+  },
+  {
+    title: "Trusted by 5,000+ Brands",
+    description:
+      "From Shopify launches to Sephora shelves — 4.9★ rating across 1,200+ verified client reviews.",
   },
 ];
 
@@ -154,6 +154,11 @@ export default function WhyChooseUs(): ReactElement {
       <h2 id="why-choose-heading" className={styles.heading}>
         Why 5,000+ Brands Choose Us for Premium Custom Packaging
       </h2>
+      <p className={styles.subheading}>
+        From emerging startups to global Fortune 500 brands, businesses trust us
+        to deliver packaging that protects products, elevates unboxing, and
+        builds lasting customer loyalty.
+      </p>
 
       <div className={styles.desktopGrid}>
         {FEATURES.map((f) => (
@@ -195,6 +200,24 @@ export default function WhyChooseUs(): ReactElement {
             />
           ))}
         </div>
+      </div>
+
+      <div className={styles.ctaWrap}>
+        <div className={styles.ctaButtons}>
+          <a href="/contact-us" className={styles.ctaPrimary}>
+            Get My Free Quote in 60 Seconds
+          </a>
+          <a href="/products" className={styles.ctaSecondary}>
+            Explore Our Packaging Solutions
+            <span aria-hidden className={styles.ctaArrow}>
+              →
+            </span>
+          </a>
+        </div>
+        <p className={styles.ctaMicro}>
+          No minimums on samples · Free design consultation · Money-back
+          quality guarantee
+        </p>
       </div>
     </section>
   );

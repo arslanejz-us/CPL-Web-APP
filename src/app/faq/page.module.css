@@ -1,0 +1,105 @@
+.container {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 3rem 5% 4rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: #eef5f8;
+  color: var(--primary-dark);
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin: 0 0 1rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--text-gray);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.footerCta {
+  margin-top: 3rem;
+  padding: 2.5rem 2rem;
+  background: linear-gradient(135deg, #eef5f8 0%, #f8fafa 100%);
+  border: 1px solid #bdd5dc;
+  border-radius: 18px;
+  text-align: center;
+}
+
+.footerCtaTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 0 0 0.5rem;
+}
+
+.footerCtaText {
+  color: var(--text-gray);
+  margin: 0 auto 1.5rem;
+  max-width: 520px;
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+
+.footerCtaActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.btnPrimary {
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff8a3d, var(--primary-orange));
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 8px 20px rgba(255, 107, 0, 0.32);
+}
+
+.btnSecondary {
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--primary-dark);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.92rem;
+  border: 1px solid #bdd5dc;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.btnSecondary:hover {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+}

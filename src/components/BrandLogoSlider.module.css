@@ -1,0 +1,47 @@
+.brandSection {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.sliderContainer {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.sliderTrack {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: scroll 35s linear infinite;
+}
+
+.sliderTrack:hover {
+  animation-play-state: paused;
+}
+
+.slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 180px; /* Increased slide width to accommodate larger logos */
+  padding: 0 1rem;
+}
+
+.logoImage {
+  max-width: 100%;
+  height: auto;
+  max-height: 75px; /* Increased height to make logos larger */
+  object-fit: contain;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

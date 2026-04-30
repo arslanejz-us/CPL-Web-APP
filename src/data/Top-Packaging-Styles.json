@@ -1,0 +1,26 @@
+[
+  {
+    "tag": "Box Style",
+    "title": "Cigarette Boxes",
+    "image": "/images/hero-bg.png",
+    "link": "#"
+  },
+  {
+    "tag": "Eco-Friendly",
+    "title": "Mailer Box",
+    "image": "/images/hero-bg.png",
+    "link": "#"
+  },
+  {
+    "tag": "Custom Shape",
+    "title": "Tuck Boxes",
+    "image": "/images/hero-bg.png",
+    "link": "#"
+  },
+  {
+    "tag": "Pouch Type",
+    "title": "Mylar Bags and Pouches",
+    "image": "/images/hero-bg.png",
+    "link": "#"
+  }
+]

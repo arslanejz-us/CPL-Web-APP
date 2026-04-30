@@ -1,4 +1,7 @@
-import { ReactElement, FormEvent } from "react";
+import { ReactElement, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { quoteSchema, QuoteFormValues } from "@/lib/validations/quote.schema";
 import styles from "./QuoteModal.module.css";
 
 interface QuoteModalProps {
@@ -7,13 +10,45 @@ interface QuoteModalProps {
 }
 
 export default function QuoteModal({ isOpen, onClose }: QuoteModalProps): ReactElement | null {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<QuoteFormValues>({
+    resolver: zodResolver(quoteSchema),
+  });
+
   if (!isOpen) return null;
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted");
-    onClose();
+  const onSubmit = async (data: QuoteFormValues) => {
+    setIsSubmitting(true);
+    setErrorMsg("");
+    setSuccess(false);
+
+    try {
+      const response = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to submit quote");
+      }
+
+      setSuccess(true);
+      reset();
+      setTimeout(() => {
+        onClose();
+        setSuccess(false);
+      }, 3000);
+    } catch (error: any) {
+      setErrorMsg(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -28,136 +63,79 @@ export default function QuoteModal({ isOpen, onClose }: QuoteModalProps): ReactE
           <p>Fill out the form below and our packaging specialists will get back to you.</p>
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.row}>
-            <div className={styles.half}>
-              <label className={styles.label} htmlFor="Last_Name">Full Name*</label>
-              <input type="text" className={styles.input} id="Last_Name" name="Last_Name" placeholder="John Doe" maxLength={80} required />
-            </div>
-            <div className={styles.half}>
-              <label className={styles.label} htmlFor="Email">Email*</label>
-              <input type="email" className={styles.input} id="Email" name="Email" placeholder="john@example.com" maxLength={100} required />
-            </div>
+        {success ? (
+          <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+            <span className="font-medium">Success!</span> Your quote request has been sent.
           </div>
-
-          <div className={styles.row}>
-            <div className={styles.half}>
-              <label className={styles.label} htmlFor="Phone">Phone*</label>
-              <input type="text" className={styles.input} id="Phone" name="Phone" placeholder="(555) 123-4567" maxLength={30} required />
+        ) : (
+          <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+            {errorMsg && (
+              <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                {errorMsg}
+              </div>
+            )}
+            <div className={styles.row}>
+              <div className={styles.half}>
+                <label className={styles.label} htmlFor="full_name">Full Name*</label>
+                <input type="text" className={styles.input} id="full_name" placeholder="John Doe" {...register("full_name")} />
+                {errors.full_name && <p className="text-red-500 text-xs mt-1">{errors.full_name.message}</p>}
+              </div>
+              <div className={styles.half}>
+                <label className={styles.label} htmlFor="email">Email*</label>
+                <input type="email" className={styles.input} id="email" placeholder="john@example.com" {...register("email")} />
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+              </div>
             </div>
-            <div className={styles.half}>
-              <label className={styles.label} htmlFor="Total_Quantity">Total Quantity</label>
-              <input type="number" className={styles.input} id="Total_Quantity" name="Total_Quantity" placeholder="e.g. 1000" required />
+
+            <div className={styles.row}>
+              <div className={styles.half}>
+                <label className={styles.label} htmlFor="phone">Phone</label>
+                <input type="text" className={styles.input} id="phone" placeholder="(555) 123-4567" {...register("phone")} />
+              </div>
+              <div className={styles.half}>
+                <label className={styles.label} htmlFor="quantity">Total Quantity</label>
+                <input type="number" className={styles.input} id="quantity" placeholder="e.g. 1000" {...register("quantity", { valueAsNumber: true })} />
+                {errors.quantity && <p className="text-red-500 text-xs mt-1">{errors.quantity.message}</p>}
+              </div>
             </div>
-          </div>
 
-          <div className={styles.row}>
-            <div className={styles.half}>
-              <label className={styles.label} htmlFor="Box_Size">Box Size</label>
-              <input type="text" className={styles.input} id="Box_Size" name="Box_Size" maxLength={255} placeholder="Length x Width x Depth" required />
+            <div className={styles.row}>
+              <div className={styles.half}>
+                <label className={styles.label} htmlFor="size">Box Size</label>
+                <input type="text" className={styles.input} id="size" placeholder="Length x Width x Depth" {...register("size")} />
+              </div>
+              <div className={styles.half}>
+                <label className={styles.label} htmlFor="product_name">Box Type</label>
+                <select className={styles.select} id="product_name" {...register("product_name")}>
+                  <option value="">Select Box Type</option>
+                  <option value="Straight Tuck Boxes">Straight Tuck Boxes</option>
+                  <option value="Reverse Tuck Boxes">Reverse Tuck Boxes</option>
+                  <option value="Mailer Box">Mailer Box</option>
+                  <option value="Folding Cartons">Folding Cartons</option>
+                  <option value="Rigid Boxes">Rigid Boxes</option>
+                </select>
+              </div>
             </div>
-            <div className={styles.half}>
-              <label className={styles.label} htmlFor="Box_Type">Box Type</label>
-              <select className={styles.select} id="Box_Type" name="Box_Type">
-                <option value="-None-">Select Box Type</option>
-                <option value="Straight Tuck Boxes">Straight Tuck Boxes</option>
-                <option value="Reverse Tuck Boxes">Reverse Tuck Boxes</option>
-                <option value="Lock Bottom Boxes">Lock Bottom Boxes</option>
-                <option value="Holster Boxes">Holster Boxes</option>
-                <option value="Tuck Top Boxes">Tuck Top Boxes</option>
-                <option value="Sleeve Boxes">Sleeve Boxes</option>
-                <option value="Two-Piece Boxes">Two-Piece Boxes</option>
-                <option value="Folding Cartons">Folding Cartons</option>
-                <option value="Rigid Boxes">Rigid Boxes</option>
-                <option value="Seal End Box">Seal End Box</option>
-                <option value="Beer Tray with lid">Beer Tray with lid</option>
-                <option value="Book Style Boxes">Book Style Boxes</option>
-                <option value="Dispenser Boxes">Dispenser Boxes</option>
-                <option value="Cigar Box">Cigar Box</option>
-                <option value="Flip Top Box">Flip Top Box</option>
-                <option value="Tray with Sleeve">Tray with Sleeve</option>
-                <option value="One Piece Boxes">One Piece Boxes</option>
-                <option value="Suitcase Boxes">Suitcase Boxes</option>
-                <option value="Auto-lock Bottom Boxes">Auto-lock Bottom Boxes</option>
-                <option value="Display Boxes">Display Boxes</option>
-                <option value="5-panel Hanger Boxes">5-panel Hanger Boxes</option>
-                <option value="Crash Bottom Boxes">Crash Bottom Boxes</option>
-                <option value="One-piece Tuck Top Boxes">One-piece Tuck Top Boxes</option>
-                <option value="Boxes with Custom Cutouts">Boxes with Custom Cutouts</option>
-                <option value="Boxes with Thumb Tabs">Boxes with Thumb Tabs</option>
-                <option value="Bubble Mailers">Bubble Mailers</option>
-                <option value="Roll end tuck top corrugated">Roll end tuck top corrugated</option>
-                <option value="Hang Tab Boxes">Hang Tab Boxes</option>
-                <option value="Pillow Boxes">Pillow Boxes</option>
-                <option value="Snap Lock Bottom Boxes">Snap Lock Bottom Boxes</option>
-                <option value="Paper Bags">Paper Bags</option>
-                <option value="Mylar Bags">Mylar Bags</option>
-                <option value="Die Cut Mylar Bags">Die Cut Mylar Bags</option>
-                <option value="Mylar Pouches">Mylar Pouches</option>
-                <option value="Mylar Ziplock bags">Mylar Ziplock bags</option>
-                <option value="Heat seal mylar bags">Heat seal mylar bags</option>
-                <option value="Custom zipper pouches">Custom zipper pouches</option>
-                <option value="Circle mylar bags">Circle mylar bags</option>
-                <option value="Sealed mylar bags">Sealed mylar bags</option>
-                <option value="Cigarette boxes">Cigarette boxes</option>
-                <option value="Chilled resistance boxes">Chilled resistance boxes</option>
-                <option value="Clear Lid Display boxes">Clear Lid Display boxes</option>
-                <option value="Takeout boxes">Takeout boxes</option>
-                <option value="Gable boxes">Gable boxes</option>
-                <option value="Handle boxes">Handle boxes</option>
-                <option value="Tuck top mailer boxes">Tuck top mailer boxes</option>
-                <option value="Double wall tuck top">Double wall tuck top</option>
-                <option value="Hexagon boxes">Hexagon boxes</option>
-                <option value="Popup Display Boxes">Popup Display Boxes</option>
-                <option value="Pyramid Boxes">Pyramid Boxes</option>
-                <option value="Window Display Boxes">Window Display Boxes</option>
-                <option value="Telescope Boxes">Telescope Boxes</option>
-                <option value="Cube Boxes">Cube Boxes</option>
-                <option value="Round Top Boxes">Round Top Boxes</option>
-                <option value="Roll End Tuck Top Boxes">Roll End Tuck Top Boxes</option>
-                <option value="Roll End Lid Boxes">Roll End Lid Boxes</option>
-              </select>
+
+            <div className={styles.row}>
+              <div className={styles.half} style={{ flex: '1 1 100%' }}>
+                <label className={styles.label} htmlFor="message">Specifications</label>
+                <textarea
+                  className={styles.textarea}
+                  id="message"
+                  placeholder="Provide detailed packaging specifications including dimensions, materials, weight restrictions, and design references and we'll get back to you with an instant quote."
+                  {...register("message")}
+                ></textarea>
+              </div>
             </div>
-          </div>
 
-          <div className={styles.row}>
-            <div className={styles.half} style={{ flex: '1 1 100%' }}>
-              <label className={styles.label} htmlFor="Description">Specifications</label>
-              <textarea
-                className={styles.textarea}
-                id="Description"
-                name="Description"
-                placeholder="Provide detailed packaging specifications including dimensions, materials, weight restrictions, and design references and we'll get back to you with an instant quote."
-              ></textarea>
+            <div className={styles.row}>
+              <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Get Quote"}
+              </button>
             </div>
-          </div>
-
-          <div className={styles.hiddenRow}>
-            <input type="hidden" name="City" value="" />
-            <input type="hidden" name="State" value="" />
-            <input type="hidden" name="Country" value="" />
-            <select name="Lead_Source" defaultValue="Organic" hidden>
-              <option value="Organic">Organic</option>
-            </select>
-            <select name="Medium" defaultValue="Popup Form" hidden>
-              <option value="Popup Form">Popup Form</option>
-            </select>
-            <input type="hidden" name="IP" value="" />
-            <input type="hidden" name="IP_to_ISP" value="" />
-            <input type="hidden" name="IP_to_Org" value="" />
-            <input type="hidden" name="Page_Title" value="" />
-            <input type="hidden" name="Full_Page_URL" value="" />
-            <input type="hidden" name="First_Visited_URL" value="" />
-          </div>
-
-          {/*  */}
-
-          <div className={styles.row}>
-            <button type="submit" className={styles.submitBtn}>
-              Get Quote
-            </button>
-          </div>
-        </form>
+          </form>
+        )}
       </div>
     </div>
   );
