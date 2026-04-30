@@ -13,8 +13,9 @@ export async function getProducts() {
     .eq('is_active', true)
     .order('created_at', { ascending: false })
 
-  if (error) throw new Error(error.message)
-  return data
+  if (error) { console.error('getProducts error:', error.message); return [] }
+  return data ?? []
+
 }
 
 export async function getProductBySlug(slug: string) {
@@ -34,6 +35,6 @@ export async function getProductBySlug(slug: string) {
     .eq('is_active', true)
     .single()
 
-  if (error) throw new Error(error.message)
+  if (error) { console.error('getProductBySlug error:', error.message); return null }
   return data
 }

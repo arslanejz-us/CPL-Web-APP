@@ -9,6 +9,6 @@ export async function getProductFAQs(productId: string) {
     .eq('product_id', productId)
     .order('sort_order', { ascending: true })
 
-  if (error) throw new Error(error.message)
-  return data
+  if (error) { console.error('getProductFAQs error:', error.message); return [] }
+  return data ?? []
 }

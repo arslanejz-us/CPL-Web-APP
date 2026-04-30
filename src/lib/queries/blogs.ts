@@ -9,8 +9,8 @@ export async function getBlogs() {
     .eq('is_published', true)
     .order('published_at', { ascending: false })
 
-  if (error) throw new Error(error.message)
-  return data
+  if (error) { console.error('getBlogs error:', error.message); return [] }
+  return data ?? []
 }
 
 export async function getBlogBySlug(slug: string) {
@@ -23,6 +23,6 @@ export async function getBlogBySlug(slug: string) {
     .eq('is_published', true)
     .single()
 
-  if (error) throw new Error(error.message)
+  if (error) { console.error('Supabase error:', error.message); return null }
   return data
 }

@@ -9,8 +9,8 @@ export async function getIndustries() {
     .eq('is_active', true)
     .order('created_at', { ascending: false })
 
-  if (error) throw new Error(error.message)
-  return data
+  if (error) { console.error('getIndustries error:', error.message); return [] }
+  return data ?? []
 }
 
 export async function getIndustryBySlug(slug: string) {
@@ -28,6 +28,6 @@ export async function getIndustryBySlug(slug: string) {
     .eq('is_active', true)
     .single()
 
-  if (error) throw new Error(error.message)
+  if (error) { console.error('Supabase error:', error.message); return null }
   return data
 }

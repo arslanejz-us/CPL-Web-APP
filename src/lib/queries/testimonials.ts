@@ -9,6 +9,6 @@ export async function getTestimonials() {
     .eq('is_active', true)
     .order('created_at', { ascending: false })
 
-  if (error) throw new Error(error.message)
-  return data
+  if (error) { console.error('getTestimonials error:', error.message); return [] }
+  return data ?? []
 }
