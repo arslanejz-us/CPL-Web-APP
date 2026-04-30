@@ -1,19 +1,21 @@
 import HeroPanel from "@/components/HeroPanel";
-import Hero from "@/components/Hero";
-import TopPackagingStyles from "@/components/TopPackagingStyles";
+import BrandLogos from "@/components/BrandLogos";
+import PackagingCategories from "@/components/PackagingCategories";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import OurProcess from "@/components/OurProcess";
 import Testimonials from "@/components/Testimonials";
+import CTABanner from "@/components/CTABanner";
 
 export default function Home() {
   return (
     <>
       <HeroPanel />
-      <Hero />
-      <TopPackagingStyles />
+      <BrandLogos />
+      <PackagingCategories />
       <WhyChooseUs />
       <OurProcess />
       <Testimonials />
+      <CTABanner />
     </>
   );
 }

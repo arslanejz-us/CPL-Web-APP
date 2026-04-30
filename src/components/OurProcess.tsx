@@ -1,111 +1,61 @@
-import { ReactElement } from "react";
-import styles from "./OurProcess.module.css";
+"use client";
 
-type Step = {
-  number: string;
-  title: string;
-  description: string;
-  icon: ReactElement;
-};
+import { motion } from "framer-motion";
+import { MessageSquare, Paintbrush, FlaskConical, Factory, Truck } from "lucide-react";
 
-const STEPS: Step[] = [
-  {
-    number: "01",
-    title: "Discovery & Brief",
-    description:
-      "Tell us your product, brand goals, and timeline. Our specialists draft a tailored packaging recommendation in under 24 hours.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-      </svg>
-    ),
-  },
-  {
-    number: "02",
-    title: "Free 3D Design",
-    description:
-      "Our in-house design team creates dielines, mockups, and photo-realistic 3D renders so you can see your packaging before production.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
-        <line x1="12" y1="22" x2="12" y2="15.5" />
-        <polyline points="22 8.5 12 15.5 2 8.5" />
-        <polyline points="2 15.5 12 8.5 22 15.5" />
-        <line x1="12" y1="2" x2="12" y2="8.5" />
-      </svg>
-    ),
-  },
-  {
-    number: "03",
-    title: "Sample & Approval",
-    description:
-      "Verify color, finish, and structure with a physical sample. Approve once, and we lock the spec for the full production run.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-        <polyline points="22 4 12 14.01 9 11.01" />
-      </svg>
-    ),
-  },
-  {
-    number: "04",
-    title: "Production",
-    description:
-      "ISO-certified facilities, premium materials, and rigorous QC at every stage. Standard turnaround is 7–10 business days.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="3" />
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-      </svg>
-    ),
-  },
-  {
-    number: "05",
-    title: "Global Delivery",
-    description:
-      "Door-to-door shipping to 50+ countries with full tracking. Free expedited delivery within the USA on every order.",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="1" y="3" width="15" height="13" />
-        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-        <circle cx="5.5" cy="18.5" r="2.5" />
-        <circle cx="18.5" cy="18.5" r="2.5" />
-      </svg>
-    ),
-  },
+const steps = [
+  { step: "01", icon: MessageSquare, title: "Discovery Call", desc: "Tell us your vision, dimensions, quantity, and timeline. We'll ask the right questions." },
+  { step: "02", icon: Paintbrush, title: "3D Design & Proof", desc: "Our designers create a digital mockup with your brand colors and artwork for approval." },
+  { step: "03", icon: FlaskConical, title: "Physical Sample", desc: "We produce a physical sample for you to hold, feel, and approve before production begins." },
+  { step: "04", icon: Factory, title: "Production", desc: "Full production run in our ISO-certified facility with real-time quality checkpoints." },
+  { step: "05", icon: Truck, title: "Delivery", desc: "Fully packaged and shipped to your door worldwide, with live tracking every step of the way." },
 ];
 
-export default function OurProcess(): ReactElement {
+export default function OurProcess() {
   return (
-    <section className={styles.section} aria-labelledby="process-heading">
-      <div className={styles.inner}>
-        <header className={styles.header}>
-          <span className={styles.eyebrow}>How It Works</span>
-          <h2 id="process-heading" className={styles.heading}>
-            From Concept to Delivered Packaging in 5 Steps
+    <section className="py-24 bg-brand-navy overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <span className="text-brand-accent font-semibold text-sm uppercase tracking-widest">How It Works</span>
+          <h2 className="mt-3 text-4xl sm:text-5xl font-display font-bold text-white leading-tight">
+            From Concept to Delivered
           </h2>
-          <p className={styles.subheading}>
-            We&apos;ve streamlined every step so you can focus on your product —
-            we&apos;ll handle the rest.
+          <p className="mt-4 text-lg text-white/60 max-w-2xl mx-auto">
+            A simple, transparent process designed to get your packaging right the first time.
           </p>
-        </header>
+        </motion.div>
 
-        <ol className={styles.timeline}>
-          {STEPS.map((step) => (
-            <li key={step.number} className={styles.step}>
-              <div className={styles.stepIconWrap}>
-                <span aria-hidden className={styles.stepIcon}>
-                  {step.icon}
-                </span>
-              </div>
-              <div className={styles.stepBody}>
-                <span className={styles.stepNumber}>Step {step.number}</span>
-                <h3 className={styles.stepTitle}>{step.title}</h3>
-                <p className={styles.stepDescription}>{step.description}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <div className="relative">
+          {/* Connector line */}
+          <div className="hidden lg:block absolute top-16 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8">
+            {steps.map((step, i) => (
+              <motion.div
+                key={step.step}
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.12 }}
+                className="relative text-center"
+              >
+                <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-light mb-5 mx-auto shadow-lg shadow-brand-primary/30">
+                  <step.icon className="w-7 h-7 text-white" />
+                  <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-accent text-white text-xs font-bold flex items-center justify-center">
+                    {i + 1}
+                  </span>
+                </div>
+                <h3 className="font-display font-semibold text-white mb-2 text-lg">{step.title}</h3>
+                <p className="text-sm text-white/55 leading-relaxed">{step.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -1,95 +1,79 @@
-import { ReactElement } from "react";
-import styles from "./Testimonials.module.css";
+"use client";
 
-type Testimonial = {
-  text: string;
-  author: string;
-  role: string;
-  rating: number;
-};
+import { motion } from "framer-motion";
+import { Star, Quote } from "lucide-react";
 
-const TESTIMONIALS: Testimonial[] = [
+const testimonials = [
   {
-    text: "CPL transformed our packaging. The quality is outstanding and the customer service is unmatched. We've shipped over 200,000 units with zero defect issues.",
-    author: "Sarah Mitchell",
-    role: "Founder, Artisan Foods Co",
+    name: "Sarah Johnson",
+    role: "Brand Director, Glow Cosmetics",
+    text: "CPL transformed our unboxing experience. The quality of the rigid boxes is exceptional — our customers constantly mention the packaging in reviews.",
     rating: 5,
+    initials: "SJ",
   },
   {
-    text: "We switched from our previous supplier and saved 30% while improving print quality. The 3D mockup process means there are no surprises in production.",
-    author: "James Chen",
-    role: "Supply Chain Manager, TechBox Ltd",
+    name: "Marcus Chen",
+    role: "CEO, NutriCore Supplements",
+    text: "7-day turnaround is no joke — they delivered on time every single time. The design team nailed our brand identity on the first proof.",
     rating: 5,
+    initials: "MC",
   },
   {
-    text: "The ability to customize at scale is incredible. Our brand now really stands out on shelves and customers consistently mention the unboxing experience.",
-    author: "Emma Rodriguez",
-    role: "Director of Marketing, EcoStyle Beauty",
+    name: "Priya Patel",
+    role: "Operations Manager, EcoWear",
+    text: "The eco-friendly kraft boxes are perfect for our sustainability brand story. Our customers love that the packaging is 100% recyclable.",
     rating: 5,
+    initials: "PP",
   },
 ];
 
-function StarRow({ count }: { count: number }): ReactElement {
+export default function Testimonials() {
   return (
-    <span className={styles.stars} aria-label={`Rated ${count} out of 5 stars`}>
-      <span aria-hidden>{"★".repeat(count)}{"☆".repeat(5 - count)}</span>
-    </span>
-  );
-}
-
-export default function Testimonials(): ReactElement {
-  return (
-    <section className={styles.section} aria-labelledby="testimonials-heading">
-      <div className={styles.inner}>
-        <header className={styles.header}>
-          <span className={styles.eyebrow}>Trusted Worldwide</span>
-          <h2 id="testimonials-heading" className={styles.heading}>
-            What Our Clients Say
+    <section className="py-24 bg-slate-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <span className="text-brand-accent font-semibold text-sm uppercase tracking-widest">Social Proof</span>
+          <h2 className="mt-3 text-4xl sm:text-5xl font-display font-bold text-brand-navy">
+            Brands Love Us
           </h2>
-          <p className={styles.subheading}>
-            Real feedback from brand owners, supply chain leads, and marketing
-            teams shipping with CPL.
-          </p>
-        </header>
+          <div className="flex items-center justify-center gap-2 mt-4">
+            {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />)}
+            <span className="text-muted-foreground text-sm ml-2">4.9/5 from 1,200+ reviews</span>
+          </div>
+        </motion.div>
 
-        <ul className={styles.grid}>
-          {TESTIMONIALS.map((t) => (
-            <li key={t.author} className={styles.card}>
-              <span aria-hidden className={styles.quoteMark}>
-                &ldquo;
-              </span>
-              <StarRow count={t.rating} />
-              <blockquote className={styles.quote}>{t.text}</blockquote>
-              <footer className={styles.attribution}>
-                <span className={styles.avatar} aria-hidden>
-                  {t.author
-                    .split(" ")
-                    .map((p) => p[0])
-                    .slice(0, 2)
-                    .join("")}
-                </span>
-                <div>
-                  <strong className={styles.author}>{t.author}</strong>
-                  <span className={styles.role}>{t.role}</span>
+        <div className="grid md:grid-cols-3 gap-8">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={t.name}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              whileHover={{ y: -4 }}
+              className="bg-white border border-border rounded-2xl p-8 shadow-sm hover:shadow-xl hover:shadow-black/5 transition-all duration-300"
+            >
+              <Quote className="w-8 h-8 text-brand-primary/20 mb-4" />
+              <div className="flex gap-1 mb-4">
+                {[...Array(t.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
+              </div>
+              <p className="text-foreground leading-relaxed mb-6">&ldquo;{t.text}&rdquo;</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-primary to-brand-light flex items-center justify-center text-white text-sm font-bold">
+                  {t.initials}
                 </div>
-              </footer>
-            </li>
+                <div>
+                  <div className="font-semibold text-brand-navy text-sm">{t.name}</div>
+                  <div className="text-muted-foreground text-xs">{t.role}</div>
+                </div>
+              </div>
+            </motion.div>
           ))}
-        </ul>
-
-        <div className={styles.statRow} aria-label="Customer satisfaction stats">
-          <div className={styles.stat}>
-            <strong>4.9</strong>
-            <span>Average Rating</span>
-          </div>
-          <div className={styles.stat}>
-            <strong>1,200+</strong>
-            <span>Verified Reviews</span>
-          </div>
-          <div className={styles.stat}>
-            <strong>98%</strong>
-            <span>Repeat Order Rate</span>
-          </div>
         </div>
       </div>
     </section>

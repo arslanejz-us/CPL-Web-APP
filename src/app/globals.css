@@ -2,48 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #fafafa;
-  --foreground: #0a0a0a;
-
-  /* Brand palette (CPL design system) */
-  --primary: #1e5a73;          /* Ocean teal — main brand color */
-  --primary-light: #2a7a95;    /* Hover/active states */
-  --secondary: #0d2f42;        /* Dark navy — headings, contrast text */
-  --accent: #ff6b35;           /* CTA orange */
-  --accent-light: #ff8555;     /* Orange gradient stop */
-
-  /* Aliases kept for backward compatibility with existing class refs */
-  --primary-dark: #1e5a73;     /* maps to primary */
-  --primary-green: #2a7a95;    /* maps to primary-light */
-  --primary-orange: #ff6b35;   /* maps to accent */
-
-  /* Neutral scale */
-  --text-gray: #6b7280;
-  --text-muted: #4b5563;
-  --border-light: #e5e7eb;
-  --surface-tint: #eef5f8;     /* light teal tint */
-  --surface-soft: #f6f9fa;     /* off-white */
-
-  /* Typography stacks */
-  --font-display: var(--font-poppins), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: var(--font-plus-jakarta), system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #fafafa;
-    --foreground: #0a0a0a;
+    --background: 0 0% 98%;
+    --foreground: 210 40% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 40% 8%;
+    --border: 210 20% 90%;
+    --input: 210 20% 90%;
+    --primary: 200 58% 28%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 50% 16%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 20% 96%;
+    --muted-foreground: 210 15% 46%;
+    --accent: 18 100% 60%;
+    --accent-foreground: 0 0% 100%;
+    --ring: 200 58% 28%;
+    --radius: 0.75rem;
+
+    /* Legacy CSS vars for backward compat */
+    --primary-color: #1e5a73;
+    --accent-color: #ff6b35;
+    --accent: #ff6b35;
+    --accent-light: #ff8555;
+    --font-display: var(--font-poppins), system-ui, sans-serif;
+    --font-body: var(--font-plus-jakarta), system-ui, sans-serif;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-body);
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
+@layer utilities {
+  .text-balance { text-wrap: balance; }
 }
