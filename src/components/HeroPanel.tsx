@@ -72,7 +72,7 @@ export default function HeroPanel() {
 
             {/* Subheadline */}
             <motion.p variants={leftItemVariants} className="text-base md:text-lg text-white/75 leading-relaxed max-w-2xl">
-              Custom branded packaging delivered in 7 days. From concept to production—we handle everything with precision, quality, and your brand's vision at the forefront.
+              Custom branded packaging delivered in 7 days. From concept to production—we handle everything with precision, quality, and your brand&apos;s vision at the forefront.
             </motion.p>
 
             {/* Modern CTA Buttons */}

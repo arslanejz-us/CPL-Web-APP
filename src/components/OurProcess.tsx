@@ -92,7 +92,7 @@ export default function OurProcess() {
           </motion.h2>
 
           <motion.p variants={itemVariants} className="text-base md:text-lg text-white/80 max-w-2xl mx-auto">
-            We've streamlined every step so you can focus on your product - we'll handle the rest.
+            We&apos;ve streamlined every step so you can focus on your product - we&apos;ll handle the rest.
           </motion.p>
         </motion.div>
 
