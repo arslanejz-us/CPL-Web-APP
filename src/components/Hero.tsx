@@ -47,6 +47,7 @@ export default function Hero(): ReactElement {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+
   }, []);
 
   const nextSlide = () => {
@@ -66,22 +67,22 @@ export default function Hero(): ReactElement {
   return (
     <section className={styles.heroSection}>
       <div className={styles.carouselContainer}>
-        <div 
+        <div
           className={styles.carouselTrack}
           style={{ transform: `translateX(-${currentIndex * (100 / cardsToShow)}%)` }}
         >
           {slidesData.map((slide, index) => (
-            <div 
-              key={index} 
-              className={styles.carouselSlide} 
+            <div
+              key={index}
+              className={styles.carouselSlide}
               style={{ flex: `0 0 ${100 / cardsToShow}%` }}
             >
               <div className={styles.slideInner}>
-                <Image 
-                  src={slide.image} 
-                  alt={slide.title} 
-                  fill 
-                  className={styles.slideImage} 
+                <Image
+                  src={slide.image}
+                  alt={slide.title}
+                  fill
+                  className={styles.slideImage}
                   priority={index < 2}
                 />
                 <div className={styles.overlay}></div>
@@ -102,7 +103,7 @@ export default function Hero(): ReactElement {
             </div>
           ))}
         </div>
-        
+
         <button className={`${styles.navButton} ${styles.prevButton}`} onClick={prevSlide} aria-label="Previous">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6" /></svg>
         </button>
