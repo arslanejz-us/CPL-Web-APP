@@ -1,9 +1,9 @@
 .wrap {
-  --brand: #1e5a73;
-  --brand-deep: #0d2f42;
-  --accent: #2a7a95;
-  --highlight: #2a7a95;
-  --orange: #ff6b35;
+  --brand: #1E1E1E;
+  --brand-deep: #1E1E1E;
+  --accent: #109689;
+  --highlight: #109689;
+  --orange: #109689;
 
   width: 100%;
   margin: 4rem 0 0;
@@ -18,12 +18,12 @@
   background:
     radial-gradient(circle at top right, rgba(13, 148, 136, 0.18), transparent 60%),
     radial-gradient(circle at bottom left, rgba(255, 107, 0, 0.08), transparent 55%),
-    linear-gradient(135deg, #0d2f42 0%, #1e5a73 55%, #2a7a95 100%);
+    linear-gradient(135deg, #1E1E1E 0%, #1E1E1E 55%, #109689 100%);
   color: #fff;
   text-align: center;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(6, 84, 74, 0.18);
+  box-shadow: 0 20px 60px rgba(16, 150, 137, 0.18);
 }
 
 @media (min-width: 768px) {

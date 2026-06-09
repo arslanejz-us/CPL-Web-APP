@@ -1,103 +1,172 @@
-"use client";
-import React, { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import styles from './TopPackagingStyles.module.css';
-import packagingData from '../data/Top-Packaging-Styles.json';
-import BrandLogoSlider from './BrandLogoSlider';
-import QuoteModal from './QuoteModal';
+﻿"use client";
 
-import Link from 'next/link';
+import { motion, cubicBezier } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { useState } from "react";
+import QuoteModal from "./QuoteModal";
+
+const productCategories = [
+  {
+    id: "boxes",
+    name: "Rigid Boxes",
+    description: "Premium rigid setup & display boxes with custom printing",
+    image: "/images/rigid-box.jpg",
+  },
+  {
+    id: "mailers",
+    name: "Mailer Boxes",
+    description: "Durable corrugated shipping and mailing solutions",
+    image: "/images/mailer-box.jpg",
+  },
+  {
+    id: "bags",
+    name: "Custom Bags",
+    description: "Branded paper, plastic, and kraft pouches for retail",
+    image: "/images/custom-bag.jpg",
+  },
+];
 
 export default function TopPackagingStyles() {
-  const [cards, setCards] = useState<{ id: string; slug?: string; name?: string; title?: string; image?: string; hero_image_url?: string; link?: string; tag?: string; short_description?: string }[]>([]);
-  const trackRef = useRef<HTMLDivElement>(null);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
-  // Duplicate cards 20 times for a pseudo-infinite loop effect
-  useEffect(() => {
-    const manyCards = Array(20).fill(packagingData).flat();
-    setCards(manyCards);
-  }, []);
-
-  // Center the scroll position initially so user can scroll left or right endlessly
-  useEffect(() => {
-    if (trackRef.current && cards.length > 0) {
-      // approx card width (300) + gap (16) = 316
-      // Jump to the 10th set of items (middle)
-      trackRef.current.scrollLeft = 316 * packagingData.length * 10;
-    }
-  }, [cards]);
-
-  // Navigation handlers
-  const handlePrev = () => {
-    if (trackRef.current) {
-      trackRef.current.scrollBy({ left: -316, behavior: 'smooth' }); // card width + gap
-    }
-  };
-  const handleNext = () => {
-    if (trackRef.current) {
-      trackRef.current.scrollBy({ left: 316, behavior: 'smooth' });
-    }
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+    },
   };
 
-  const handleQuoteClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // Stop link navigation
-    setIsQuoteModalOpen(true);
+  const itemVariants = {
+    hidden: { opacity: 0, y: 32 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: cubicBezier(0.22, 1, 0.36, 1) },
+    },
+  };
+
+  const hoverVariants = {
+    hover: {
+      y: -8,
+      boxShadow: "0 20px 40px -10px rgba(13, 47, 66, 0.15)",
+      transition: { duration: 0.3 },
+    },
   };
 
   return (
-    <section className={styles.section}>
-      {/* Top Bar with Brand Logos */}
-      <div className={styles.topBarContainer}>
-        <div className={styles.topBarLeft}>
-          <span className={styles.topText}>Serving 5000+ Happy Customers!</span>
-          <span className={styles.reviews}>
-            <span className={styles.stars}>★★★★☆</span>
-            <span className={styles.reviewText}>Trustpilot 4.9 Google Reviews</span>
-          </span>
-        </div>
-        <div className={styles.topBarRight}>
-          <BrandLogoSlider />
-        </div>
-      </div>
+    <section className="py-20 lg:py-32 bg-white" suppressHydrationWarning>
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="text-center mb-16 lg:mb-20"
+        >
+          <motion.span variants={itemVariants} className="inline-block mb-4">
+            <span className="text-xs font-bold tracking-widest uppercase text-brand-primary">
+              Popular Solutions
+            </span>
+          </motion.span>
 
-      {/* Header */}
-      <div className={styles.header}>
-        <h2 className={styles.title}>Top Packaging Styles</h2>
-        <p className={styles.subTitle}>We cover all your packaging needs. Can&apos;t find yours?</p>
-        <a href="#" className={styles.cta}>VIEW ALL →</a>
-      </div>
+          <motion.h2 variants={itemVariants} className="text-4xl lg:text-5xl font-extrabold text-brand-charcoal mb-4 leading-tight">
+            Top Packaging Styles
+          </motion.h2>
 
-      {/* Slider */}
-      <div className={styles.sliderWrapper}>
-        <div className={styles.sliderTrack} ref={trackRef}>
-          {cards.map((item, idx) => (
-            <Link href={item.link || '#'} key={idx} className={styles.card}>
-              <Image
-                src={item.image || '/images/hero-bg.png'}
-                alt={item.title || ''}
-                width={300}
-                height={200}
-                className={styles.cardImage}
-                priority={idx < 4}
-              />
-              {item.tag && <span className={styles.cardTag}>{item.tag}</span>}
-              <h3 className={styles.cardTitle}>{item.title}</h3>
-              <span className={styles.cardLink} onClick={handleQuoteClick}>Request a Quote</span>
+          <motion.p variants={itemVariants} className="text-lg text-slate-600 max-w-2xl mx-auto mb-8">
+            We cover all your packaging needs. Choose from our most popular solutions or{" "}
+            <Link href="/products" className="text-brand-primary font-semibold hover:underline">
+              explore all products
             </Link>
+            .
+          </motion.p>
+        </motion.div>
+
+        {/* Product Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
+        >
+          {productCategories.map((product) => (
+            <motion.div
+              key={product.id}
+              variants={itemVariants}
+              whileHover="hover"
+              className="group"
+            >
+              <motion.div
+                variants={hoverVariants}
+                className="bg-white border border-slate-200 rounded-2xl overflow-hidden transition-all duration-300"
+              >
+                {/* Image Container */}
+                <div className="relative h-48 overflow-hidden bg-slate-100">
+                  <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                    <span className="text-slate-400 font-medium">{product.name}</span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-brand-charcoal mb-2">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-slate-600 mb-6">
+                    {product.description}
+                  </p>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setIsQuoteModalOpen(true)}
+                      className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-primary hover:bg-orange-700 text-white font-semibold rounded-lg transition-colors text-sm"
+                    >
+                      Get Quote
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    <Link
+                      href="/products"
+                      className="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold rounded-lg transition-colors text-sm"
+                    >
+                      Learn More
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
           ))}
-        </div>
-        {/* Navigation Arrows */}
-        <button className={`${styles.navBtn} ${styles.prev}`} aria-label="Previous" onClick={handlePrev}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <button className={`${styles.navBtn} ${styles.next}`} aria-label="Next" onClick={handleNext}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
+        </motion.div>
+
+        {/* CTA Section */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="text-center"
+        >
+          <motion.div variants={itemVariants} className="space-y-4">
+            <p className="text-slate-600 text-sm">
+              Not sure which packaging style fits your brand?
+            </p>
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-brand-primary hover:bg-brand-charcoal text-white font-semibold rounded-lg transition-colors"
+            >
+              View All Products
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </motion.div>
+        </motion.div>
       </div>
 
-      {/* Quote Request Modal */}
       <QuoteModal isOpen={isQuoteModalOpen} onClose={() => setIsQuoteModalOpen(false)} />
     </section>
   );
 }
+

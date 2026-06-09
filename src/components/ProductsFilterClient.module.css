@@ -7,7 +7,7 @@
   background: #ffffff;
   border: 1px solid var(--border-light);
   border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(6, 84, 74, 0.04);
+  box-shadow: 0 4px 14px rgba(16, 150, 137, 0.04);
   margin-bottom: 1.5rem;
 }
 
@@ -67,7 +67,7 @@
 .select:focus {
   outline: none;
   border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(11, 120, 108, 0.15);
+  box-shadow: 0 0 0 3px rgba(16, 150, 137, 0.15);
 }
 
 .select {
@@ -162,8 +162,8 @@
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 26px rgba(6, 84, 74, 0.1);
-  border-color: rgba(11, 120, 108, 0.35);
+  box-shadow: 0 14px 26px rgba(16, 150, 137, 0.1);
+  border-color: rgba(16, 150, 137, 0.35);
 }
 
 .imageWrapper {

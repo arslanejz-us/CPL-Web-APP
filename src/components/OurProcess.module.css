@@ -74,8 +74,8 @@
 
 .step:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(6, 84, 74, 0.1);
-  border-color: rgba(11, 120, 108, 0.3);
+  box-shadow: 0 12px 28px rgba(16, 150, 137, 0.1);
+  border-color: rgba(16, 150, 137, 0.3);
 }
 
 .stepIconWrap {
@@ -89,7 +89,7 @@
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #2a7a95, #1e5a73);
+  background: linear-gradient(135deg, #109689, #1E1E1E);
   color: #ffffff;
   display: inline-flex;
   align-items: center;

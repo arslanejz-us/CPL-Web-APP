@@ -4,7 +4,7 @@
   padding: clamp(3.5rem, 8vw, 6rem) 5%;
   background:
     radial-gradient(ellipse at top right, rgba(13, 148, 136, 0.12), transparent 60%),
-    linear-gradient(135deg, #0d2f42 0%, #1e5a73 55%, #2a7a95 100%);
+    linear-gradient(135deg, #1E1E1E 0%, #1E1E1E 55%, #109689 100%);
   color: #ffffff;
   text-align: center;
   isolation: isolate;

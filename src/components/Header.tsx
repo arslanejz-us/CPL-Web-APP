@@ -1,342 +1,382 @@
 "use client";
 
-import { ReactElement, useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import QuoteModal from "./QuoteModal";
 
 interface HeaderProps {
-  industries?: { id: string; slug: string; name: string; icon?: string; icon_url?: string; short_description?: string }[];
+  industries?: Array<{ id: string; slug: string; name: string; icon_url?: string }>;
+  featuredProducts?: Array<{ id?: string; slug?: string; name: string; short_description?: string; hero_image_url?: string | null }>;
 }
 
-export default function Header({ industries = [] }: HeaderProps): ReactElement {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const otherNavLinks = [
+  { href: "/blogs", label: "Blog" },
+  { href: "/about-us", label: "About" },
+  { href: "/faq", label: "FAQ" },
+  { href: "/contact-us", label: "Contact" },
+];
+
+export default function Header({ industries = [], featuredProducts = [] }: HeaderProps) {
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
-  const [isMobileIndustriesOpen, setIsMobileIndustriesOpen] = useState(false);
-  const [isIndustriesPanelOpen, setIsIndustriesPanelOpen] = useState(false);
+  const [isProductsMenuOpen, setIsProductsMenuOpen] = useState(false);
+  const [isIndustriesMenuOpen, setIsIndustriesMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const industriesTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const industriesPanelRef = useRef<HTMLDivElement | null>(null);
+
+  const productsRef = useRef<HTMLDivElement>(null);
+  const productsButtonRef = useRef<HTMLButtonElement>(null);
+  const industriesRef = useRef<HTMLDivElement>(null);
+  const industriesButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    if (isMobileMenuOpen || isQuoteModalOpen || isIndustriesPanelOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-  }, [isMobileMenuOpen, isQuoteModalOpen, isIndustriesPanelOpen]);
+    if (isMobileOpen) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "unset";
+    return () => { document.body.style.overflow = "unset"; };
+  }, [isMobileOpen]);
 
+  // Close menus on outside click
   useEffect(() => {
-    if (!isIndustriesPanelOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setIsIndustriesPanelOpen(false);
-        industriesTriggerRef.current?.focus();
-        return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (productsRef.current && !productsRef.current.contains(e.target as Node) &&
+        productsButtonRef.current && !productsButtonRef.current.contains(e.target as Node)) {
+        setIsProductsMenuOpen(false);
       }
-      if (e.key === "Tab" && industriesPanelRef.current) {
-        const focusables = industriesPanelRef.current.querySelectorAll<HTMLElement>(
-          "a, button, [tabindex]:not([tabindex=\"-1\"])"
-        );
-        if (focusables.length === 0) return;
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault(); last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault(); first.focus();
-        }
+      if (industriesRef.current && !industriesRef.current.contains(e.target as Node) &&
+        industriesButtonRef.current && !industriesButtonRef.current.contains(e.target as Node)) {
+        setIsIndustriesMenuOpen(false);
       }
     };
-    document.addEventListener("keydown", onKey);
-    const t = window.setTimeout(() => {
-      industriesPanelRef.current?.querySelector<HTMLElement>("a, button")?.focus();
-    }, 50);
-    return () => { document.removeEventListener("keydown", onKey); window.clearTimeout(t); };
-  }, [isIndustriesPanelOpen]);
 
-  const navLinkClass = "flex items-center gap-1 text-sm font-medium text-white/85 hover:text-white transition-colors duration-200 py-1";
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  // Close on Escape
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsProductsMenuOpen(false);
+        setIsIndustriesMenuOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, []);
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? "bg-brand-navy/95 backdrop-blur-md shadow-lg shadow-black/20" : "bg-brand-navy"}`}>
-      {/* Main Navigation */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <Image
-              src="/images/website-logo.webp"
-              alt="Custom Packaging Lane Logo"
-              width={180}
-              height={45}
-              className="h-10 w-auto"
-              priority
-            />
+    <header suppressHydrationWarning className={`sticky top-0 z-40 w-full transition-all duration-300 h-16 ${isScrolled ? "bg-white shadow-lg border-b border-slate-100" : "bg-white border-b border-slate-100"
+      }`}>
+      <nav className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between relative">
+        {/* Logo */}
+        <Link href="/" className="flex-shrink-0">
+          <Image
+            src="/images/website-logo.webp"
+            alt="CPL Packaging"
+            width={180}
+            height={45}
+            className="h-10 w-auto"
+            priority
+          />
+        </Link>
+
+        {/* Desktop Navigation */}
+        <div className="hidden lg:flex items-center gap-1">
+          {/* Home Link */}
+          <Link
+            href="/"
+            className="px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-primary transition-colors"
+          >
+            Home
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-8">
-            <Link href="/" className={navLinkClass}>Home</Link>
-            <Link href="/products" className={navLinkClass}>
+          {/* Products Mega Menu */}
+          <div className="relative group">
+            <button
+              ref={productsButtonRef}
+              onClick={() => setIsProductsMenuOpen(!isProductsMenuOpen)}
+              onMouseEnter={() => setIsProductsMenuOpen(true)}
+              onMouseLeave={() => setIsProductsMenuOpen(false)}
+              className="px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-primary transition-colors flex items-center gap-1.5"
+            >
               Products
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><polyline points="6 9 12 15 18 9" /></svg>
-            </Link>
-            <button
-              ref={industriesTriggerRef}
-              type="button"
-              className={`${navLinkClass} bg-transparent border-0 cursor-pointer`}
-              aria-haspopup="dialog"
-              aria-expanded={isIndustriesPanelOpen}
-              aria-controls="industries-panel"
-              onClick={() => setIsIndustriesPanelOpen(true)}
-            >
-              Industries
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5"><polyline points="6 9 12 15 18 9" /></svg>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isProductsMenuOpen ? "rotate-180" : ""}`} />
             </button>
-            <Link href="/blogs" className={navLinkClass}>Blog</Link>
-            <Link href="/about-us" className={navLinkClass}>About</Link>
-            <Link href="/faq" className={navLinkClass}>FAQ</Link>
-            <Link href="/contact-us" className={navLinkClass}>Contact</Link>
-          </nav>
 
-          {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center gap-3">
-            <button
-              onClick={() => setIsQuoteModalOpen(true)}
-              className="inline-flex items-center gap-2 bg-brand-accent hover:bg-brand-accent-light text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5"
-            >
-              Rush Order
-            </button>
+            <AnimatePresence>
+              {isProductsMenuOpen && (
+                <motion.div
+                  ref={productsRef}
+                  onMouseEnter={() => setIsProductsMenuOpen(true)}
+                  onMouseLeave={() => setIsProductsMenuOpen(false)}
+                  initial={{ opacity: 0, y: -12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.25 }}
+                  className="fixed left-0 right-0 top-16 w-full bg-gradient-to-b from-white via-white to-slate-50 border-b border-slate-200 shadow-xl z-50"
+                >
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+                    {/* 4-Column Grid: 1 Intro + 3 Products */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                      {/* Column 1: Intro Section */}
+                      <div className="lg:col-span-1 flex flex-col">
+                        <div className="flex-1">
+                          <h3 className="text-2xl font-bold text-brand-charcoal mb-3">Our Products</h3>
+                          <p className="text-slate-600 text-sm leading-relaxed">
+                            Discover our complete range of premium custom packaging solutions designed to elevate your brand and protect your products.
+                          </p>
+                        </div>
+                        <Link
+                          href="/products"
+                          onClick={() => setIsProductsMenuOpen(false)}
+                          className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 bg-brand-primary hover:bg-brand-charcoal text-white font-semibold text-sm rounded-lg transition-colors"
+                        >
+                          View All
+                          <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </div>
+
+                      {/* Columns 2-4: Top 3 Featured Products */}
+                      {featuredProducts.length > 0 ? (
+                        featuredProducts.slice(0, 3).map((product) => (
+                          <Link
+                            key={product.id}
+                            href={`/products/${product.slug}`}
+                            onClick={() => setIsProductsMenuOpen(false)}
+                            className="group lg:col-span-1"
+                          >
+                            <div className="relative bg-white rounded-xl border border-slate-200 overflow-hidden hover:border-brand-primary transition-all duration-300 hover:shadow-lg h-full flex flex-col">
+                              <div className="h-32 bg-slate-100 overflow-hidden relative flex-shrink-0">
+                                {product.hero_image_url ? (
+                                  <Image
+                                    src={product.hero_image_url}
+                                    alt={product.name}
+                                    width={300}
+                                    height={128}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                                    <span className="text-slate-400 text-xs">Product Image</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="p-3 flex flex-col flex-1">
+                                <h4 className="text-sm font-bold text-brand-charcoal group-hover:text-brand-primary transition-colors line-clamp-1">
+                                  {product.name}
+                                </h4>
+                                {product.short_description && (
+                                  <p className="text-xs text-slate-600 mt-1 line-clamp-1">{product.short_description}</p>
+                                )}
+                                <div className="mt-3 flex items-center gap-1.5 text-brand-primary font-semibold text-xs group-hover:gap-2 transition-all mt-auto">
+                                  Learn More
+                                  <ArrowRight className="w-3 h-3" />
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="col-span-full py-8 text-center text-slate-500">
+                          <p>Loading products...</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Mobile Hamburger */}
+          {/* Industries Mega Menu */}
+          <div className="relative group">
+            <button
+              ref={industriesButtonRef}
+              onClick={() => setIsIndustriesMenuOpen(!isIndustriesMenuOpen)}
+              onMouseEnter={() => setIsIndustriesMenuOpen(true)}
+              onMouseLeave={() => setIsIndustriesMenuOpen(false)}
+              className="px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-primary transition-colors flex items-center gap-1.5"
+            >
+              Industries
+              <ChevronDown className={`w-4 h-4 transition-transform ${isIndustriesMenuOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            <AnimatePresence>
+              {isIndustriesMenuOpen && (
+                <motion.div
+                  ref={industriesRef}
+                  onMouseEnter={() => setIsIndustriesMenuOpen(true)}
+                  onMouseLeave={() => setIsIndustriesMenuOpen(false)}
+                  initial={{ opacity: 0, y: -12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.25 }}
+                  className="fixed left-0 right-0 top-16 w-full bg-gradient-to-b from-white via-white to-slate-50 border-b border-slate-200 shadow-xl z-50"
+                >
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+                    {/* Header */}
+                    <div className="mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                      <div>
+                        <h3 className="text-2xl font-bold text-brand-charcoal mb-2">Industries We Serve</h3>
+                        <p className="text-slate-600 text-sm max-w-2xl">
+                          Find packaging solutions tailored to your specific industry needs and requirements.
+                        </p>
+                      </div>
+                      <Link
+                        href="/industries"
+                        onClick={() => setIsIndustriesMenuOpen(false)}
+                        className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-primary hover:bg-brand-charcoal text-white font-semibold text-sm rounded-lg transition-colors flex-shrink-0"
+                      >
+                        View All
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+
+                    {/* Industries Grid - Responsive multi-row */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
+                      {industries.length > 0 ? (
+                        industries.map((industry) => (
+                          <Link
+                            key={industry.id}
+                            href={`/industries/${industry.slug}`}
+                            onClick={() => setIsIndustriesMenuOpen(false)}
+                            className="group"
+                          >
+                            <div className="flex flex-col items-center text-center p-4 bg-white rounded-xl border border-slate-200 hover:border-brand-primary hover:shadow-md transition-all duration-300">
+                              <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-brand-primary/10 to-brand-primary/10 flex items-center justify-center mb-3 group-hover:from-brand-primary/20 group-hover:to-brand-primary/20 transition-colors">
+                                {industry.icon_url && (
+                                  <Image
+                                    src={industry.icon_url}
+                                    alt={industry.name}
+                                    width={40}
+                                    height={40}
+                                    className="w-10 h-10 object-contain"
+                                  />
+                                )}
+                              </div>
+                              <span className="text-sm font-bold text-brand-charcoal group-hover:text-brand-primary transition-colors leading-snug">
+                                {industry.name}
+                              </span>
+                            </div>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="col-span-full py-8 text-center text-slate-500">
+                          <p>Loading industries...</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Other Navigation Links */}
+          {otherNavLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="px-3 py-2 text-sm font-medium text-slate-700 hover:text-brand-primary transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* Desktop CTA */}
+        <div className="hidden lg:flex items-center gap-3">
           <button
-            className="lg:hidden p-2 text-white/80 hover:text-white transition-colors"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-label="Open Mobile Menu"
+            onClick={() => setIsQuoteModalOpen(true)}
+            className="px-5 py-2.5 bg-brand-primary hover:bg-brand-charcoal text-white text-sm font-semibold rounded-lg transition-colors shadow-sm hover:shadow-md"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-              <line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
+            Get Quote
           </button>
         </div>
-      </div>
 
-      {/* Mobile Menu Overlay */}
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setIsMobileOpen(!isMobileOpen)}
+          className="lg:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+          aria-label="Toggle menu"
+        >
+          {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </nav>
+
+      {/* Mobile Menu */}
       <AnimatePresence>
-        {isMobileMenuOpen && (
+        {isMobileOpen && (
           <motion.div
-            key="mobile-overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 lg:hidden"
+            className="lg:hidden fixed inset-0 top-16 z-50 bg-black/50"
+            onClick={() => setIsMobileOpen(false)}
           >
-            <div className="absolute inset-0 bg-black/60" onClick={() => setIsMobileMenuOpen(false)} />
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ type: "tween", ease: [0.4, 0, 0.2, 1], duration: 0.32 }}
-              className="absolute top-0 left-0 bottom-0 w-80 bg-brand-navy shadow-2xl flex flex-col"
+              transition={{ type: "tween", duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-80 h-[calc(100vh-4rem)] bg-white overflow-y-auto flex flex-col"
             >
-              {/* Mobile Header */}
-              <div className="flex items-center justify-between px-6 h-16 border-b border-white/10">
-                <Image src="/images/website-logo.webp" alt="Custom Packaging Lane Logo" width={140} height={35} className="h-9 w-auto" />
-                <button onClick={() => setIsMobileMenuOpen(false)} className="p-1 text-white/70 hover:text-white" aria-label="Close Mobile Menu">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Mobile Nav Links */}
-              <nav className="flex-1 overflow-y-auto px-6 py-6">
-                <ul className="space-y-1">
-                  {[
-                    { href: "/", label: "Home" },
-                    { href: "/products", label: "Products" },
-                    { href: "/blogs", label: "Blog" },
-                    { href: "/about-us", label: "About" },
-                    { href: "/faq", label: "FAQ" },
-                    { href: "/contact-us", label: "Contact" },
-                  ].map(({ href, label }) => (
-                    <li key={href}>
-                      <Link
-                        href={href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block px-3 py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors text-sm font-medium"
-                      >
-                        {label}
-                      </Link>
-                    </li>
-                  ))}
-                  {/* Industries accordion */}
-                  <li>
-                    <div className="flex items-center justify-between px-3 py-2.5 rounded-lg">
-                      <Link href="/industries" onClick={() => setIsMobileMenuOpen(false)} className="text-white/80 hover:text-white text-sm font-medium">
-                        Industries
-                      </Link>
-                      <button
-                        onClick={() => setIsMobileIndustriesOpen(!isMobileIndustriesOpen)}
-                        className="p-1 text-white/60 hover:text-white"
-                      >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-                          className={`w-4 h-4 transition-transform ${isMobileIndustriesOpen ? "rotate-180" : ""}`}>
-                          <polyline points="6 9 12 15 18 9" />
-                        </svg>
-                      </button>
-                    </div>
-                    <AnimatePresence>
-                      {isMobileIndustriesOpen && (
-                        <motion.ul
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden pl-3 mt-1 space-y-1"
-                        >
-                          {industries.map((ind) => (
-                            <li key={ind.id}>
-                              <Link
-                                href={`/industries/${ind.slug}`}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="block px-3 py-2 text-white/60 hover:text-white text-xs font-medium rounded-lg hover:bg-white/5 transition-colors"
-                              >
-                                {ind.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </motion.ul>
-                      )}
-                    </AnimatePresence>
-                  </li>
-                </ul>
+              <nav className="flex-1 px-6 py-6 space-y-2">
+                <Link
+                  href="/"
+                  onClick={() => setIsMobileOpen(false)}
+                  className="block px-4 py-2.5 text-slate-700 hover:bg-slate-50 rounded-lg transition-colors text-sm font-medium"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/products"
+                  onClick={() => setIsMobileOpen(false)}
+                  className="block px-4 py-2.5 text-slate-700 hover:bg-slate-50 rounded-lg transition-colors text-sm font-medium"
+                >
+                  Products
+                </Link>
+                <Link
+                  href="/industries"
+                  onClick={() => setIsMobileOpen(false)}
+                  className="block px-4 py-2.5 text-slate-700 hover:bg-slate-50 rounded-lg transition-colors text-sm font-medium"
+                >
+                  Industries
+                </Link>
+                {otherNavLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMobileOpen(false)}
+                    className="block px-4 py-2.5 text-slate-700 hover:bg-slate-50 rounded-lg transition-colors text-sm font-medium"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </nav>
 
-              {/* Mobile Footer CTA */}
-              <div className="px-6 py-6 border-t border-white/10">
+              <div className="border-t border-slate-100 p-6 space-y-3">
                 <button
-                  onClick={() => { setIsMobileMenuOpen(false); setIsQuoteModalOpen(true); }}
-                  className="w-full bg-brand-accent hover:bg-brand-accent-light text-white font-semibold py-3 rounded-lg transition-colors text-sm"
+                  onClick={() => {
+                    setIsMobileOpen(false);
+                    setIsQuoteModalOpen(true);
+                  }}
+                  className="w-full px-4 py-2.5 bg-brand-primary hover:bg-brand-charcoal text-white text-sm font-semibold rounded-lg transition-colors"
                 >
-                  Rush Order
+                  Get Quote
                 </button>
               </div>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Industries Slide-In Panel */}
-      <AnimatePresence>
-        {isIndustriesPanelOpen && (
-          <>
-            <motion.div
-              key="industries-backdrop"
-              className="fixed inset-0 z-50 bg-black/50"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              onClick={() => setIsIndustriesPanelOpen(false)}
-              aria-hidden
-            />
-            <motion.div
-              key="industries-panel"
-              ref={industriesPanelRef}
-              id="industries-panel"
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="industries-panel-title"
-              className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "tween", ease: [0.4, 0, 0.2, 1], duration: 0.32 }}
-            >
-              {/* Panel Header */}
-              <div className="flex items-center justify-between px-6 py-5 border-b border-border">
-                <h2 id="industries-panel-title" className="text-lg font-display font-bold text-brand-navy">
-                  Browse by Industry
-                </h2>
-                <button
-                  type="button"
-                  onClick={() => setIsIndustriesPanelOpen(false)}
-                  aria-label="Close industries menu"
-                  className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
-              </div>
-
-              {/* Panel Body */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-4">
-                {/* Feature tile */}
-                <Link
-                  href="/contact-us?topic=industry-fit"
-                  onClick={() => setIsIndustriesPanelOpen(false)}
-                  className="group flex items-center justify-between bg-gradient-to-br from-brand-primary/10 to-brand-light/5 border border-brand-primary/20 rounded-xl p-4 hover:shadow-md transition-all"
-                >
-                  <div>
-                    <span className="text-xs font-semibold text-brand-accent uppercase tracking-wider">Need help?</span>
-                    <strong className="block text-sm font-display font-bold text-brand-navy mt-0.5">Not sure which industry fits your product?</strong>
-                    <span className="text-xs text-muted-foreground mt-0.5 block">Get a free expert recommendation in 24 hours.</span>
-                  </div>
-                  <span aria-hidden className="text-brand-primary text-xl ml-3 group-hover:translate-x-1 transition-transform">→</span>
-                </Link>
-
-                {/* Industries grid */}
-                <ul className="grid grid-cols-1 gap-2">
-                  {industries.map((ind) => (
-                    <li key={ind.id}>
-                      <Link
-                        href={`/industries/${ind.slug}`}
-                        onClick={() => setIsIndustriesPanelOpen(false)}
-                        className="group flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-muted transition-colors"
-                      >
-                        <div className="w-10 h-10 rounded-lg bg-white border border-border shadow-sm flex items-center justify-center flex-shrink-0">
-                          <Image
-                            src={ind.icon_url || "/images/hero-bg.png"}
-                            alt=""
-                            width={28}
-                            height={28}
-                            className="w-7 h-7 object-contain"
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <span className="block text-sm font-semibold text-brand-navy group-hover:text-brand-primary transition-colors">{ind.name}</span>
-                          {ind.short_description && (
-                            <span className="block text-xs text-muted-foreground truncate">{ind.short_description}</span>
-                          )}
-                        </div>
-                        <span aria-hidden className="text-muted-foreground group-hover:text-brand-primary group-hover:translate-x-0.5 transition-all text-sm">→</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Panel Footer */}
-              <div className="px-6 py-4 border-t border-border">
-                <Link
-                  href="/industries"
-                  onClick={() => setIsIndustriesPanelOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 text-sm font-semibold text-brand-primary hover:text-brand-light transition-colors"
-                >
-                  View All Industries →
-                </Link>
-              </div>
-            </motion.div>
-          </>
         )}
       </AnimatePresence>
 

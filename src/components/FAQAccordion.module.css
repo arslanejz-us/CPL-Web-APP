@@ -18,7 +18,7 @@
 
 .itemOpen {
   border-color: var(--primary-green);
-  box-shadow: 0 8px 24px rgba(11, 120, 108, 0.08);
+  box-shadow: 0 8px 24px rgba(16, 150, 137, 0.08);
 }
 
 .itemHeading {

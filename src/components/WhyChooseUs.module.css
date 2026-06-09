@@ -1,10 +1,10 @@
 .section {
-  --brand: #1e5a73;
-  --brand-deep: #0d2f42;
-  --accent: #2a7a95;
-  --icon-green: #2a7a95;
+  --brand: #1E1E1E;
+  --brand-deep: #1E1E1E;
+  --accent: #109689;
+  --icon-green: #109689;
   --card-bg: #eef5f8;
-  --card-border: rgba(6, 84, 74, 0.18);
+  --card-border: rgba(16, 150, 137, 0.18);
   --text-muted: #3f4f4d;
 
   width: 100%;
@@ -104,8 +104,8 @@
 .desktopGrid .card:hover,
 .slide .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(6, 84, 74, 0.12);
-  border-color: rgba(11, 120, 108, 0.35);
+  box-shadow: 0 12px 28px rgba(16, 150, 137, 0.12);
+  border-color: rgba(16, 150, 137, 0.35);
 }
 
 .iconWrap {
@@ -160,7 +160,7 @@
   border-radius: 999px;
   border: none;
   padding: 0;
-  background: rgba(6, 84, 74, 0.22);
+  background: rgba(16, 150, 137, 0.22);
   cursor: pointer;
   transition:
     background 0.25s ease,
@@ -168,7 +168,7 @@
 }
 
 .dot:hover {
-  background: rgba(6, 84, 74, 0.4);
+  background: rgba(16, 150, 137, 0.4);
 }
 
 .dotActive {

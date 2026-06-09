@@ -48,3 +48,10 @@
   color: #bcc5c8;
   user-select: none;
 }
+
+/* Dark mode for breadcrumbs on colored backgrounds */
+:global(.bg-transparent) .wrap {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
